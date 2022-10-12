@@ -2,6 +2,7 @@
 #define WORLD_H
 
 #include <vector>
+#include "ant.h"
 
 class World
 {
@@ -9,7 +10,7 @@ public:
     World();
 
 private:
-    std::vector<*Ant> Ants;
+    std::vector<Ant*> Ants;
 
 };
 

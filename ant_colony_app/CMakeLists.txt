@@ -23,10 +23,12 @@ find_package(GTest REQUIRED)
 SET(PROJECT_SOURCES
         world.cpp
         antcolony.cpp
+        ant.cpp
 )
 SET(PROJECT_HEADERS
         world.h
         antcolony.h
+        ant.h
 )
 add_library(antSim SHARED)
 target_compile_features(antSim PUBLIC cxx_std_17)
