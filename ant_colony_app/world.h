@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "ant.h"
+#include "food.h"
 
 class World
 {
@@ -19,6 +20,7 @@ public:
         double y{0};
         int food_count{0};
     };
+
     const Colony* get_home() const;
     const std::vector<Ant*> get_ants() const;
     void update();

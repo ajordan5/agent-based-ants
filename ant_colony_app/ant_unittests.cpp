@@ -95,10 +95,62 @@ TEST(AntDynamics, WhenUpdating_ExpectRandomTurn)
 
     for (auto a : ant_poses)
     {
-        EXPECT_EQ(a->x, 1);
-        EXPECT_EQ(a->y, 2);
-        EXPECT_EQ(a->heading, 0);
+        EXPECT_NE(a->x, 1);
+        EXPECT_NE(a->y, 2);
+        EXPECT_NE(a->heading, 0);
     }
 
 
+}
+
+class PrebuiltFood: public testing::Test
+{
+public:
+    PrebuiltFood()
+    {
+        for (std::vector<int> l : expected_locs)
+        {
+            f.add_food(l[0], l[1]);
+        }
+    }
+
+    ~PrebuiltFood()
+    { }
+
+protected:
+    Food f;
+    int goldTotalFood{4};
+    std::vector<std::vector<int>> expected_locs{{1,1}, {3,2}, {7,7}, {7,1}};
+};
+
+TEST(FoodConstructor, WhenInitializingFood_ExpectEmpty)
+{
+    Food f;
+    EXPECT_TRUE(f.get_locations()->empty());
+}
+
+TEST(FoodAdd, WhenAddingFood_ExpectNonEmptyAndCorrectLocations)
+{
+    Food f;
+    f.add_food(1,1);
+    EXPECT_TRUE(!f.get_locations()->empty());
+
+    auto loc = *f.get_locations();
+    EXPECT_EQ(1, loc.size());
+    EXPECT_EQ(1, loc[1].size());
+    EXPECT_TRUE(loc[1].count(1));
+
+}
+
+TEST_F(PrebuiltFood, GivenPrebuiltFood_ExpectCorrectLocations)
+{
+    auto locs = *f.get_locations();
+    EXPECT_EQ(goldTotalFood+1, f.get_total());
+
+    for (auto exp : expected_locs)
+    {
+        int x_loc = exp[0];
+        int y_loc = exp[1];
+        EXPECT_TRUE(locs[x_loc].count(y_loc));
+    }
 }
