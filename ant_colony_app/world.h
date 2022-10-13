@@ -17,8 +17,10 @@ public:
     {
         double x{0};
         double y{0};
+        int food_count{0};
     };
     const Colony* get_home() const;
+    const std::vector<Ant*> get_ants() const;
 
 private:
     Colony home_base;

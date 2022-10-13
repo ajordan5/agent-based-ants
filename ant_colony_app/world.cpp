@@ -16,6 +16,11 @@ const World::Colony* World::get_home() const
     return &home_base;
 }
 
+const std::vector<Ant*> World::get_ants() const
+{
+    return ants;
+}
+
 void World::add_many_ants(int num_of_ants)
 {
     ant_population += num_of_ants;
@@ -24,3 +29,5 @@ void World::add_many_ants(int num_of_ants)
         ants.push_back(new Ant{home_base.x, home_base.y, 0.0});
     }
 }
+
+

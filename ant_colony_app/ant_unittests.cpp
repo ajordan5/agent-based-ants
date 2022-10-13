@@ -7,6 +7,7 @@ TEST(WorldConstructor, WhenInitializingADefaultWorld_ExpectHomeAtOrigin)
     EXPECT_EQ(w.ant_population, 0);
     EXPECT_EQ(w.get_home()->x, 0.0);
     EXPECT_EQ(w.get_home()->y, 0.0);
+    EXPECT_EQ(w.get_home()->food_count, 0);
 }
 
 TEST(WorldConstructor, WhenInitializingAWorld_ExpectHomeAtGivenLocation)
@@ -15,6 +16,7 @@ TEST(WorldConstructor, WhenInitializingAWorld_ExpectHomeAtGivenLocation)
     EXPECT_EQ(w.ant_population, 0);
     EXPECT_EQ(w.get_home()->x, 1.0);
     EXPECT_EQ(w.get_home()->y, 2.0);
+    EXPECT_EQ(w.get_home()->food_count, 0);
 }
 
 TEST(AntConstructor, WhenInitializingAnt_ExpectPoseAtGivenLocation)
@@ -47,10 +49,19 @@ TEST(AntConstructor, WhenInitializingDefaultAnt_ExpectPoseAtZero)
 
 }
 
-TEST(WorldAddAnts, WhenAddingAnts_ExpectOkay)
+TEST(WorldAddAnts, WhenAddingAnts_ExpectAtHomeBase)
 {
     World w{1, 2};
     w.add_many_ants(3);
 
     EXPECT_EQ(w.ant_population, 3);
+
+    auto ant_poses = w.get_ants();
+
+    for (auto a : ant_poses)
+    {
+        EXPECT_EQ(a->x, 1);
+        EXPECT_EQ(a->y, 2);
+        EXPECT_EQ(a->heading, 0);
+    }
 }
