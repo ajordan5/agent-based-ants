@@ -23,11 +23,13 @@ public:
 
     const Colony* get_home() const;
     const std::vector<Ant*> get_ants() const;
+    Food* food{nullptr};
     void update();
 
 private:
     Colony home_base;
     std::vector<Ant*> ants;
+
 };
 
 #endif // WORLD_H

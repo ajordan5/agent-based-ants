@@ -18,6 +18,7 @@ public slots:
 protected:
     void paintEvent(QPaintEvent* event);
     void drawAnts(QPainter* painter);
+    void drawFood(QPainter* painter);
     World world;
 };
 

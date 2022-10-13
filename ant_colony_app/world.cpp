@@ -1,11 +1,11 @@
 #include "world.h"
 
-World::World() : ant_population{0}
+World::World() : ant_population{0}, food{new Food}
 {
 
 }
 
-World::World(double home_x, double home_y) : ant_population{0}
+World::World(double home_x, double home_y) : ant_population{0}, food{new Food}
 {
     home_base.x = home_x;
     home_base.y = home_y;
