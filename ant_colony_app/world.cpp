@@ -30,4 +30,11 @@ void World::add_many_ants(int num_of_ants)
     }
 }
 
+void World::update()
+{
+    for (auto a : ants)
+    {
+        a->propogate_dynamics();
+    }
+}
 

@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTimer>
+#include <world.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,7 +17,13 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
+    void update_sim();
+
 private:
     Ui::MainWindow *ui;
+    World* ant_sim{nullptr};
+    QTimer* timer{nullptr};
+    void setup_sim();
 };
 #endif // MAINWINDOW_H

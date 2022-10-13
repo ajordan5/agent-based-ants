@@ -65,3 +65,40 @@ TEST(WorldAddAnts, WhenAddingAnts_ExpectAtHomeBase)
         EXPECT_EQ(a->heading, 0);
     }
 }
+
+TEST(WorldAddAnts, WhenAddingAntsDefault_ExpectAtZero)
+{
+    World w;
+    w.add_many_ants(8);
+
+    EXPECT_EQ(w.ant_population, 8);
+
+    auto ant_poses = w.get_ants();
+
+    for (auto a : ant_poses)
+    {
+        EXPECT_EQ(a->x, 0);
+        EXPECT_EQ(a->y, 0);
+        EXPECT_EQ(a->heading, 0);
+    }
+}
+
+TEST(AntDynamics, WhenUpdating_ExpectRandomTurn)
+{
+    World w{1, 2};
+    w.add_many_ants(1);
+    auto ant_poses = w.get_ants();
+
+    EXPECT_EQ(w.ant_population, 1);
+
+    w.update();
+
+    for (auto a : ant_poses)
+    {
+        EXPECT_EQ(a->x, 1);
+        EXPECT_EQ(a->y, 2);
+        EXPECT_EQ(a->heading, 0);
+    }
+
+
+}
