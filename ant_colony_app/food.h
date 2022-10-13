@@ -9,6 +9,7 @@ class Food
 public:
     Food();
     void add_food(int x, int y);
+    void remove_food(int x, int y);
     const std::unordered_map<int, std::unordered_set<int>>* get_locations() const;
     const int get_total() const;
 

@@ -186,3 +186,23 @@ TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenAddingDuplicatesExpectNoChange)
         EXPECT_TRUE(locs[x_loc].count(y_loc));
     }
 }
+
+TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenDeletingExpectCorrectLocations)
+{
+    auto locs = *f.get_locations();
+    EXPECT_EQ(goldTotalFood, f.get_total());
+    EXPECT_FALSE(locs.empty());
+
+    for (auto exp : expected_locs)
+    {
+        int x_loc = exp[0];
+        int y_loc = exp[1];
+        EXPECT_TRUE(locs[x_loc].count(y_loc));
+        f.remove_food(x_loc, y_loc);
+    }
+
+
+    locs = *f.get_locations();
+    EXPECT_TRUE(locs.empty());
+    EXPECT_EQ(0, f.get_total());
+}
