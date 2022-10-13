@@ -10,7 +10,7 @@ public:
     Food();
     void add_food(int x, int y);
     const std::unordered_map<int, std::unordered_set<int>>* get_locations() const;
-     const int get_total() const;
+    const int get_total() const;
 
 private:
     std::unordered_map<int, std::unordered_set<int>> locations;

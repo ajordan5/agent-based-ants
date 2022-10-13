@@ -145,7 +145,39 @@ TEST(FoodAdd, WhenAddingFood_ExpectNonEmptyAndCorrectLocations)
 TEST_F(PrebuiltFood, GivenPrebuiltFood_ExpectCorrectLocations)
 {
     auto locs = *f.get_locations();
-    EXPECT_EQ(goldTotalFood+1, f.get_total());
+    EXPECT_EQ(goldTotalFood, f.get_total());
+
+    for (auto exp : expected_locs)
+    {
+        int x_loc = exp[0];
+        int y_loc = exp[1];
+        EXPECT_TRUE(locs[x_loc].count(y_loc));
+    }
+}
+
+TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenAddingExpectCorrectLocations)
+{
+    f.add_food(1,12);
+    f.add_food(7,9);
+    auto locs = *f.get_locations();
+    EXPECT_EQ(goldTotalFood+2, f.get_total());
+
+    for (auto exp : expected_locs)
+    {
+        int x_loc = exp[0];
+        int y_loc = exp[1];
+        EXPECT_TRUE(locs[x_loc].count(y_loc));
+    }
+    EXPECT_TRUE(locs[1].count(12));
+    EXPECT_TRUE(locs[7].count(9));
+}
+
+TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenAddingDuplicatesExpectNoChange)
+{
+    f.add_food(1,1);
+    f.add_food(7,7);
+    auto locs = *f.get_locations();
+    EXPECT_EQ(goldTotalFood, f.get_total());
 
     for (auto exp : expected_locs)
     {

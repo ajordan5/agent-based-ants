@@ -7,6 +7,7 @@ Food::Food()
 
 void Food::add_food(int x, int y)
 {
+    if(locations.count(x) && locations[x].count(y)) return;
     total++;
     locations[x].insert(y);
 }
