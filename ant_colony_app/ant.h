@@ -18,9 +18,9 @@ public:
     void propogate_dynamics();
 
 private:
-    double speed{1};
+    double speed{5};
     double heading_rate{0};
-    double turn_scale{1};
+    double turn_scale{0.25};
     double time_step{0.1};
 
     std::random_device rd;

@@ -8,19 +8,21 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setup_sim();
     connect(timer, SIGNAL(timeout()), this, SLOT(update_sim()));
-    timer->start(1000);
+    timer->start(100);
+    connect(this, SIGNAL(send_world(const World&)), ui->PaintWidget, SLOT(save_world(const World&)));
 }
 
 void MainWindow::setup_sim()
 {
     timer = new QTimer(this);
     ant_sim = new World;
-    ant_sim->add_many_ants(1);
+    ant_sim->add_many_ants(200);
 }
 
 void MainWindow::update_sim()
 {
     ant_sim->update();
+    emit(send_world(*ant_sim));
 }
 
 MainWindow::~MainWindow()

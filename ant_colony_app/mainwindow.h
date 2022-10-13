@@ -20,6 +20,9 @@ public:
 public slots:
     void update_sim();
 
+signals:
+    void send_world(const World& world_state);
+
 private:
     Ui::MainWindow *ui;
     World* ant_sim{nullptr};
