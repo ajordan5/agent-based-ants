@@ -10,7 +10,9 @@ public:
     World();
 
 private:
-    std::vector<Ant*> Ants;
+    std::vector<Ant*> ants;
+    void add_ant(double x, double y);
+    void add_many_ants(int num_of_ants);
 
 };
 
