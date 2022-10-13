@@ -1,10 +1,11 @@
 #include "gtest/gtest.h"
 #include "world.h"
 
-TEST(WorldConstructor, ExpectOK)
+TEST(WorldConstructor, ExpectDefaultOK)
 {
     World w{};
-    EXPECT_TRUE(true);
+    EXPECT_EQ(w.get_home().x, 0.0);
+    EXPECT_EQ(w.get_home().y, 0.0);
 }
 
 TEST(AntConstructor, ExpectOK)
