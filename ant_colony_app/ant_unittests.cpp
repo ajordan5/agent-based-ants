@@ -206,3 +206,11 @@ TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenDeletingExpectCorrectLocations)
     EXPECT_TRUE(locs.empty());
     EXPECT_EQ(0, f.get_total());
 }
+
+TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingExpectNearestFood)
+{
+    Ant a{8,8,0};
+    std::pair<int,int> result = f.search(a);
+    std::cout << result.first << " " << result.second;
+
+}
