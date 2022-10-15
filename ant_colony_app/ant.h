@@ -16,12 +16,15 @@ public:
     double heading;
 
     void propogate_dynamics();
+    void random_walk();
+    void to_food(int food_x, int food_y);
 
 private:
-    double speed{5};
-    double heading_rate{0};
-    double turn_scale{0.25};
-    double time_step{0.1};
+    double speed{50};
+    double headingRate{0};
+    double turnScale{0.15};
+    double timeStep{0.1};
+    double maxTurn{1};
 
     std::random_device rd;
     std::mt19937 gen;

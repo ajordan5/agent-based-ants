@@ -98,7 +98,7 @@ std::pair<int,int> Food::search_quadrant(int xAnt, int yAnt, int xLeft, int yTop
             {
                 if(locations[x].count(y))
                 {
-                    double dist = (xAnt-x)*(xAnt-x) + (yAnt-y)*(yAnt-y);
+                    double dist = sqrt((xAnt-x)*(xAnt-x) + (yAnt-y)*(yAnt-y));
                     if (dist < min_dist)
                     {
                         min_dist = dist;
