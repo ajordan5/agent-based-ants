@@ -14,10 +14,11 @@ public:
     double x;
     double y;
     double heading;
+    bool hasFood{false};
 
     void propogate_dynamics();
     void random_walk();
-    void to_food(int food_x, int food_y);
+    bool to_food(int food_x, int food_y);
 
 private:
     double speed{50};

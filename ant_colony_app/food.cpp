@@ -34,9 +34,9 @@ const int Food::get_total() const
     return total;
 }
 
-std::pair<int,int> Food::search(const Ant& ant)
+std::pair<int,int> Food::search(const Ant* ant)
 {
-    int piHalves = std::round(2*ant.heading / M_PI);
+    int piHalves = std::round(2*ant->heading / M_PI);
     int quadrant = piHalves%4;
 
     int yTop{0};
@@ -52,37 +52,37 @@ std::pair<int,int> Food::search(const Ant& ant)
     switch(quadrant)
     {
         case 0:{
-            yBottom = ant.y-sideSearchDistance;
-            yTop = ant.y+sideSearchDistance;
-            xLeft = ant.x;
-            xRight = ant.x+forwardSearchDistance;
+            yBottom = ant->y-sideSearchDistance;
+            yTop = ant->y+sideSearchDistance;
+            xLeft = ant->x;
+            xRight = ant->x+forwardSearchDistance;
             break;
         }
         case 1:{
-            xLeft = ant.x-sideSearchDistance;
-            xRight = ant.x+sideSearchDistance;
-            yBottom = ant.y;
-            yTop = ant.y+forwardSearchDistance;
+            xLeft = ant->x-sideSearchDistance;
+            xRight = ant->x+sideSearchDistance;
+            yBottom = ant->y;
+            yTop = ant->y+forwardSearchDistance;
             break;
         }
         case 3:{
-            xLeft = ant.x-sideSearchDistance;
-            xRight = ant.x+sideSearchDistance;
-            yTop = ant.y;
-            yBottom = ant.y-forwardSearchDistance;
+            xLeft = ant->x-sideSearchDistance;
+            xRight = ant->x+sideSearchDistance;
+            yTop = ant->y;
+            yBottom = ant->y-forwardSearchDistance;
             break;
         }
         case 2:{
-            yBottom = ant.y-sideSearchDistance;
-            yTop = ant.y+sideSearchDistance;
-            xRight = ant.x;
-            xLeft = ant.x-forwardSearchDistance;
+            yBottom = ant->y-sideSearchDistance;
+            yTop = ant->y+sideSearchDistance;
+            xRight = ant->x;
+            xLeft = ant->x-forwardSearchDistance;
             break;
         }
 
     }
 
-    return search_quadrant(ant.x, ant.y, xLeft, yTop, xRight, yBottom);
+    return search_quadrant(ant->x, ant->y, xLeft, yTop, xRight, yBottom);
 
 }
 

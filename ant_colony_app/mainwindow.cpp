@@ -16,7 +16,7 @@ void MainWindow::setup_sim()
 {
     timer = new QTimer(this);
     ant_sim = new World;
-    ant_sim->add_many_ants(200);
+    ant_sim->add_many_ants(5000);
     ant_sim->food->add_food(0,0);
     ant_sim->food->add_food(10,10);
     ant_sim->food->add_food(70,40);

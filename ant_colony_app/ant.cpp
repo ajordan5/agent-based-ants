@@ -22,7 +22,7 @@ void Ant::random_walk()
 
 }
 
-void Ant::to_food(int food_x, int food_y)
+bool Ant::to_food(int food_x, int food_y)
 {
     double yDiff = food_y - y;
     double xDiff = food_x - x;
@@ -36,17 +36,15 @@ void Ant::to_food(int food_x, int food_y)
         x = food_x;
         y = food_y;
         heading = direction;
+        return true;
     }
     else
     {
         heading = std::min(direction, maxTurn);
         x = x + cos(heading)*speed*timeStep;
         y = y + sin(heading)*speed*timeStep;
+        return false;
 
     }
 }
 
-void Ant::propogate_dynamics()
-{
-    random_walk();
-}

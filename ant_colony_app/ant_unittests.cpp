@@ -210,7 +210,7 @@ TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenDeletingExpectCorrectLocations)
 
 TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingRightExpectNearestFood)
 {
-    Ant a{0,0,0};
+    Ant* a = new Ant{0,0,0};
     std::pair<int,int> result = f.search(a);
     EXPECT_EQ(1, result.first);
     EXPECT_EQ(1, result.second);
@@ -219,7 +219,7 @@ TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingRightExpectNearestFood)
 
 TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingLeftExpectNearestFood)
 {
-    Ant a{9,2,3.14};
+    Ant* a = new Ant{9,2,3.14};
     std::pair<int,int> result = f.search(a);
     EXPECT_EQ(7, result.first);
     EXPECT_EQ(1, result.second);
@@ -228,7 +228,7 @@ TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingLeftExpectNearestFood)
 
 TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingUpExpectNearestFood)
 {
-    Ant a{2,4,-1.2};
+    Ant* a = new Ant{2,4,-1.2};
     std::pair<int,int> result = f.search(a);
     EXPECT_EQ(3, result.first);
     EXPECT_EQ(2, result.second);
@@ -237,7 +237,7 @@ TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingUpExpectNearestFood)
 
 TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingDownExpectNearestFood)
 {
-    Ant a{7,6,1.7};
+    Ant* a = new Ant{7,6,1.7};
     std::pair<int,int> result = f.search(a);
     EXPECT_EQ(7, result.first);
     EXPECT_EQ(7, result.second);

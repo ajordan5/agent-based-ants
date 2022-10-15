@@ -34,7 +34,13 @@ void World::update()
 {
     for (auto a : ants)
     {
-        a->propogate_dynamics();
+        std::pair nearestFood = food->search(a);
+        if (nearestFood.first == -1) a->random_walk();
+        else
+        {
+            bool foodClaimed = a->to_food(nearestFood.first, nearestFood.second);
+            if (foodClaimed)food->remove_food(nearestFood.first, nearestFood.second);
+        }
     }
 }
 
