@@ -22,20 +22,21 @@ void Ant::random_walk()
 
 }
 
-bool Ant::to_food(int food_x, int food_y)
+bool Ant::to_target(int targetX, int targetY)
 {
-    double yDiff = food_y - y;
-    double xDiff = food_x - x;
+    double xDiff = targetX - x;
+    double yDiff = targetY - y;
     double distance = sqrt((xDiff)*(xDiff) + (yDiff)*(yDiff));
-    double direction = atan2(yDiff, xDiff);
+    double direction = atan2(yDiff , xDiff);
 
     double travelDistance = speed*timeStep;
 
     if (travelDistance > distance)
     {
-        x = food_x;
-        y = food_y;
+        x = targetX;
+        y = targetY;
         heading = direction;
+        hasFood = !hasFood;
         return true;
     }
     else

@@ -7,13 +7,13 @@ World::World() : ant_population{0}, food{new Food}
 
 World::World(double home_x, double home_y) : ant_population{0}, food{new Food}
 {
-    home_base.x = home_x;
-    home_base.y = home_y;
+    homeBase.x = home_x;
+    homeBase.y = home_y;
 }
 
 const World::Colony* World::get_home() const
 {
-    return &home_base;
+    return &homeBase;
 }
 
 const std::vector<Ant*> World::get_ants() const
@@ -26,20 +26,41 @@ void World::add_many_ants(int num_of_ants)
     ant_population += num_of_ants;
     for (int ii = 0; ii<num_of_ants; ii++)
     {
-        ants.push_back(new Ant{home_base.x, home_base.y, 0.0});
+        ants.push_back(new Ant{homeBase.x, homeBase.y, 0.0});
     }
+}
+
+void World::store_food()
+{
+    homeBase.food_count++;
 }
 
 void World::update()
 {
     for (auto a : ants)
     {
-        std::pair nearestFood = food->search(a);
-        if (nearestFood.first == -1) a->random_walk();
+        std::pair<double,double> target;
+        if(a->hasFood)
+        {
+            target = {homeBase.x, homeBase.y};
+        }
         else
         {
-            bool foodClaimed = a->to_food(nearestFood.first, nearestFood.second);
-            if (foodClaimed)food->remove_food(nearestFood.first, nearestFood.second);
+            target = food->search(a);
+        }
+
+        if (target.first == -1) a->random_walk();
+        else
+        {
+            bool targetClaimed = a->to_target(target.first, target.second);
+            if (targetClaimed)
+            {
+                a->hasFood ? food->remove_food(target.first, target.second)
+                           : store_food();
+
+            }
+
+
         }
     }
 }

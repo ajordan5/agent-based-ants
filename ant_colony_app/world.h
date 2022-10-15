@@ -13,6 +13,7 @@ public:
     void add_ant(double x, double y);
     void add_many_ants(int num_of_ants);
     int ant_population;
+    Food* food{nullptr};
 
     struct Colony
     {
@@ -23,11 +24,11 @@ public:
 
     const Colony* get_home() const;
     const std::vector<Ant*> get_ants() const;
-    Food* food{nullptr};
+    void store_food();
     void update();
 
 private:
-    Colony home_base;
+    Colony homeBase;
     std::vector<Ant*> ants;
 
 };

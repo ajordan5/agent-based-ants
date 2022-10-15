@@ -18,7 +18,7 @@ public:
 
     void propogate_dynamics();
     void random_walk();
-    bool to_food(int food_x, int food_y);
+    bool to_target(int targetX, int targetY);
 
 private:
     double speed{50};
