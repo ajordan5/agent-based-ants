@@ -103,6 +103,26 @@ TEST(AntDynamics, WhenUpdating_ExpectRandomTurn)
 
 }
 
+TEST(FoodConstructor, WhenInitializingFood_ExpectEmpty)
+{
+    Food f;
+    EXPECT_TRUE(f.get_locations()->empty());
+}
+
+TEST(FoodAdd, WhenAddingFood_ExpectNonEmptyAndCorrectLocations)
+{
+    Food f;
+    f.add_food(1,1);
+    EXPECT_TRUE(!f.get_locations()->empty());
+
+    auto loc = *f.get_locations();
+    EXPECT_EQ(1, loc.size());
+    EXPECT_EQ(1, loc[1].size());
+    EXPECT_TRUE(loc[1].count(1));
+
+}
+
+
 class PrebuiltFood: public testing::Test
 {
 public:
@@ -122,25 +142,6 @@ protected:
     int goldTotalFood{4};
     std::vector<std::vector<int>> expected_locs{{1,1}, {3,2}, {7,7}, {7,1}};
 };
-
-TEST(FoodConstructor, WhenInitializingFood_ExpectEmpty)
-{
-    Food f;
-    EXPECT_TRUE(f.get_locations()->empty());
-}
-
-TEST(FoodAdd, WhenAddingFood_ExpectNonEmptyAndCorrectLocations)
-{
-    Food f;
-    f.add_food(1,1);
-    EXPECT_TRUE(!f.get_locations()->empty());
-
-    auto loc = *f.get_locations();
-    EXPECT_EQ(1, loc.size());
-    EXPECT_EQ(1, loc[1].size());
-    EXPECT_TRUE(loc[1].count(1));
-
-}
 
 TEST_F(PrebuiltFood, GivenPrebuiltFood_ExpectCorrectLocations)
 {
@@ -207,10 +208,38 @@ TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenDeletingExpectCorrectLocations)
     EXPECT_EQ(0, f.get_total());
 }
 
-TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingExpectNearestFood)
+TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingRightExpectNearestFood)
 {
-    Ant a{8,8,0};
+    Ant a{0,0,0};
     std::pair<int,int> result = f.search(a);
-    std::cout << result.first << " " << result.second;
+    EXPECT_EQ(1, result.first);
+    EXPECT_EQ(1, result.second);
+
+}
+
+TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingLeftExpectNearestFood)
+{
+    Ant a{9,2,3.14};
+    std::pair<int,int> result = f.search(a);
+    EXPECT_EQ(7, result.first);
+    EXPECT_EQ(1, result.second);
+
+}
+
+TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingUpExpectNearestFood)
+{
+    Ant a{2,4,-1.2};
+    std::pair<int,int> result = f.search(a);
+    EXPECT_EQ(3, result.first);
+    EXPECT_EQ(2, result.second);
+
+}
+
+TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingDownExpectNearestFood)
+{
+    Ant a{7,6,1.7};
+    std::pair<int,int> result = f.search(a);
+    EXPECT_EQ(7, result.first);
+    EXPECT_EQ(7, result.second);
 
 }

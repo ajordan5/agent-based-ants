@@ -36,13 +36,18 @@ const int Food::get_total() const
 
 std::pair<int,int> Food::search(const Ant& ant)
 {
-    int piHalves = std::round(ant.heading / M_PI);
+    int piHalves = std::round(2*ant.heading / M_PI);
     int quadrant = piHalves%4;
 
     int yTop{0};
     int xLeft{0};
     int xRight{0};
     int yBottom{0};
+
+    while (quadrant < 0)
+    {
+        quadrant = quadrant + 4;
+    }
 
     switch(quadrant)
     {
