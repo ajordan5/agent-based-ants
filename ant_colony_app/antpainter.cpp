@@ -10,6 +10,7 @@ void AntPainter::paintEvent(QPaintEvent* event)
     QPainter painter(this);
     drawAnts(&painter);
     drawFood(&painter);
+    drawHome(&painter);
 }
 
 void AntPainter::drawAnts(QPainter* painter)
@@ -26,11 +27,25 @@ void AntPainter::drawAnts(QPainter* painter)
 
 }
 
+void AntPainter::drawHome(QPainter* painter)
+{
+    QPen pen;
+    pen.setColor(Qt::black);
+    pen.setWidth(10);
+    painter->setPen(pen);
+
+    auto home = world.get_home();
+
+    painter->drawEllipse(home->x+this->width()/2, home->y+this->height()/2, 20, 20);
+
+
+}
+
 void AntPainter::drawFood(QPainter* painter)
 {
     QPen pen;
     pen.setColor(Qt::green);
-    pen.setWidth(5);
+    pen.setWidth(10);
     painter->setPen(pen);
 
     auto food_locations = *world.food->get_locations();

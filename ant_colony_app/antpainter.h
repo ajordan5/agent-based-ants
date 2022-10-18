@@ -19,6 +19,7 @@ protected:
     void paintEvent(QPaintEvent* event);
     void drawAnts(QPainter* painter);
     void drawFood(QPainter* painter);
+    void drawHome(QPainter* painter);
     World world;
 };
 

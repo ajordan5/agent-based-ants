@@ -22,8 +22,8 @@ public:
 private:
     std::unordered_map<int, std::unordered_set<int>> locations;
     std::pair<int,int> search_quadrant(int xAnt, int yAnt, int xLeft, int yTop, int xRight, int yBottom);
-    int sideSearchDistance{2};
-    int forwardSearchDistance{3};
+    int sideSearchDistance{20};
+    int forwardSearchDistance{30};
     int total{0};
 
 };
