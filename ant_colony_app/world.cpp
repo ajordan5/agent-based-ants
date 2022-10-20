@@ -2,7 +2,8 @@
 
 World::World() : ant_population{0}, food{new Food}
 {
-
+    homeBase.x = world_bounds.first/2;
+    homeBase.y = world_bounds.second/2;
 }
 
 World::World(double home_x, double home_y) : ant_population{0}, food{new Food}
@@ -19,6 +20,11 @@ const World::Colony* World::get_home() const
 const std::vector<Ant*> World::get_ants() const
 {
     return ants;
+}
+
+std::pair<double,double> World::get_bounds() const
+{
+    return world_bounds;
 }
 
 void World::add_many_ants(int num_of_ants)

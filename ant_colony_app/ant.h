@@ -16,11 +16,11 @@ public:
     double heading;
     bool hasFood{false};
 
-    void propogate_dynamics(double heading);
+    void propogate_dynamics(std::pair<double,double> bounds);
     void random_walk(std::pair<double,double> bounds);
     bool to_target(std::pair<double,double> target, std::pair<double,double> bounds);
 
-private:
+protected:
     double speed{50};
     double headingRate{0};
     double turnScale{0.15};

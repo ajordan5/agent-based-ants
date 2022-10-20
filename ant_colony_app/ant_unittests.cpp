@@ -1,13 +1,18 @@
 #include "gtest/gtest.h"
 #include "world.h"
 
-TEST(WorldConstructor, WhenInitializingADefaultWorld_ExpectHomeAtOrigin)
+#define NEAR_TOL 0.001
+
+TEST(WorldConstructor, WhenInitializingADefaultWorld_ExpectHomeAtCenter)
 {
     World w{};
-    EXPECT_EQ(w.ant_population, 0);
-    EXPECT_EQ(w.get_home()->x, 0.0);
-    EXPECT_EQ(w.get_home()->y, 0.0);
-    EXPECT_EQ(w.get_home()->food_count, 0);
+    std::pair<double, double> bounds = w.get_bounds();
+    double goldenX = bounds.first/2;
+    double goldenY = bounds.second/2;
+    EXPECT_EQ(0, w.ant_population);
+    EXPECT_EQ(goldenX, w.get_home()->x);
+    EXPECT_EQ(goldenY, w.get_home()->y);
+    EXPECT_EQ(0, w.get_home()->food_count);
 }
 
 TEST(WorldConstructor, WhenInitializingAWorld_ExpectHomeAtGivenLocation)
@@ -70,36 +75,38 @@ TEST(WorldAddAnts, WhenAddingAntsDefault_ExpectAtZero)
 {
     World w;
     w.add_many_ants(8);
+    std::pair<double, double> bounds = w.get_bounds();
+    double goldenX = bounds.first/2;
+    double goldenY = bounds.second/2;
+    auto ant_poses = w.get_ants();
 
     EXPECT_EQ(w.ant_population, 8);
 
-    auto ant_poses = w.get_ants();
-
     for (auto a : ant_poses)
     {
-        EXPECT_EQ(a->x, 0);
-        EXPECT_EQ(a->y, 0);
-        EXPECT_EQ(a->heading, 0);
+        EXPECT_EQ(goldenX, a->x);
+        EXPECT_EQ(goldenY, a->y);
+        EXPECT_EQ(0, a->heading);
     }
 }
 
-TEST(AntDynamics, WhenUpdating_ExpectRandomTurn)
+class AntSpy : public Ant
 {
-    World w{1, 2};
-    w.add_many_ants(1);
-    auto ant_poses = w.get_ants();
+public:
+    double getDistanceTraveled() {return speed*timeStep;}
+};
 
-    EXPECT_EQ(w.ant_population, 1);
+TEST(AntDynamics, GivenAnAntWhenPropogatingDynamics_ExpectCorrectLocation)
+{
+    AntSpy a;
+    double distanceTraveled = a.getDistanceTraveled();
+    a.propogate_dynamics({1000,1000});
 
-    w.update();
+    double goldenX{distanceTraveled};
+    double goldenY{0};
 
-    for (auto a : ant_poses)
-    {
-        EXPECT_NE(a->x, 1);
-        EXPECT_NE(a->y, 2);
-        EXPECT_NE(a->heading, 0);
-    }
-
+    EXPECT_NEAR(goldenX, a.x, NEAR_TOL);
+    EXPECT_NEAR(goldenY, a.y, NEAR_TOL);
 
 }
 

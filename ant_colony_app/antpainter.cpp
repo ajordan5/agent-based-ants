@@ -22,7 +22,8 @@ void AntPainter::drawAnts(QPainter* painter)
 
     for (auto ant : world.get_ants())
     {
-         painter->drawPoint(ant->x+this->width()/2, ant->y+this->height()/2);
+        std::pair<double, double> antPixels = world_to_pixel(ant->x, ant->y);
+        painter->drawPoint(antPixels.first, antPixels.second);
     }
 
 }
@@ -35,8 +36,9 @@ void AntPainter::drawHome(QPainter* painter)
     painter->setPen(pen);
 
     auto home = world.get_home();
+    auto homePixels = world_to_pixel(home->x, home->y);
 
-    painter->drawEllipse(home->x+this->width()/2, home->y+this->height()/2, 20, 20);
+    painter->drawEllipse(homePixels.first, homePixels.second, 20, 20);
 
 
 }
@@ -45,7 +47,7 @@ void AntPainter::drawFood(QPainter* painter)
 {
     QPen pen;
     pen.setColor(Qt::green);
-    pen.setWidth(10);
+    pen.setWidth(5);
     painter->setPen(pen);
 
     auto food_locations = *world.food->get_locations();
@@ -55,9 +57,19 @@ void AntPainter::drawFood(QPainter* painter)
         std::unordered_set<int> ys = i->second;
         for (auto j = ys.begin(); j != ys.end(); j++)
         {
-            painter->drawPoint(x+this->width()/2, *j+this->height()/2);
+            std::pair<double, double> foodPixels = world_to_pixel(x, *j);
+            painter->drawPoint(foodPixels.first, foodPixels.second);
         }
     }
+
+}
+
+std::pair<double,double> AntPainter::world_to_pixel(double x, double y)
+{
+    std::pair<double,double> boundary = world.get_bounds();
+    double pixel_x = this->width()*x/boundary.first;
+    double pixel_y = this->height()*y/boundary.second;
+    return {pixel_x, pixel_y};
 
 }
 

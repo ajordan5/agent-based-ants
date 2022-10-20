@@ -17,7 +17,7 @@ void Ant::random_walk(std::pair<double,double> bounds)
     headingRate = headingRate + walk * turnScale;
     heading = heading + headingRate*timeStep;
 
-    propogate_dynamics(heading);
+    propogate_dynamics(bounds);
 
 }
 
@@ -25,12 +25,12 @@ bool Ant::to_target(std::pair<double,double> target, std::pair<double,double> bo
 {
     double xDiff = target.first - x;
     double yDiff = target.second - y;
-    double distance = sqrt((xDiff)*(xDiff) + (yDiff)*(yDiff));
+    double distanceToTarget = sqrt((xDiff)*(xDiff) + (yDiff)*(yDiff));
     double direction = atan2(yDiff , xDiff);
 
     double travelDistance = speed*timeStep;
 
-    if (travelDistance > distance)
+    if (travelDistance > distanceToTarget)
     {
         x = target.first;
         y = target.second;
@@ -41,13 +41,13 @@ bool Ant::to_target(std::pair<double,double> target, std::pair<double,double> bo
     else
     {
         heading = std::min(direction, maxTurn);
-        propogate_dynamics(heading);
+        propogate_dynamics(bounds);
         return false;
 
     }
 }
 
-void Ant::propogate_dynamics(double heading)
+void Ant::propogate_dynamics(std::pair<double,double> bounds)
 {
     x = x + cos(heading)*speed*timeStep;
     y = y + sin(heading)*speed*timeStep;
