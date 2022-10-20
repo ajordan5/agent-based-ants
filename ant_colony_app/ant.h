@@ -1,6 +1,8 @@
 #ifndef ANT_H
 #define ANT_H
 
+#define PI 3.14159
+
 #include <time.h>
 #include <random>
 #include <math.h>

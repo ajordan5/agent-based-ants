@@ -16,9 +16,9 @@ void MainWindow::setup_sim()
 {
     timer = new QTimer(this);
     ant_sim = new World;
-    for (int i = 700; i < 1000; i = i+10)
+    for (int i = 700; i < 900; i = i+10)
     {
-        for (int j = 700; j < 1000; j = j+10)
+        for (int j = 700; j < 900; j = j+10)
         {
             ant_sim->food->add_food(i,j);
         }

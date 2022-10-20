@@ -36,7 +36,7 @@ const int Food::get_total() const
 
 std::pair<int,int> Food::search(const Ant* ant)
 {
-    int piHalves = std::round(2*ant->heading / M_PI);
+    int piHalves = std::round(2*ant->heading / PI);
     int quadrant = piHalves%4;
 
     int yTop{0};

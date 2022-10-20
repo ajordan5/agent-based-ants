@@ -1,7 +1,7 @@
 #ifndef FOOD_H
 #define FOOD_H
 
-#define _USE_MATH_DEFINES
+#define PI 3.14159
 
 #include <unordered_map>
 #include <unordered_set>

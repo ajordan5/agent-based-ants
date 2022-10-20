@@ -51,5 +51,20 @@ void Ant::propogate_dynamics(std::pair<double,double> bounds)
 {
     x = x + cos(heading)*speed*timeStep;
     y = y + sin(heading)*speed*timeStep;
+
+    if (x > bounds.first || x < 0)
+    {
+        heading = PI - heading;
+        headingRate = 0;
+        x > 0 ? x = bounds.first : x = 0;
+    }
+
+    if (y > bounds.first || y < 0)
+    {
+        heading = 2*PI - heading;
+        headingRate = 0;
+        y > 0 ? y = bounds.first : y = 0;
+    }
+
 }
 
