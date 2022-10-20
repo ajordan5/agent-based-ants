@@ -25,12 +25,14 @@ SET(PROJECT_SOURCES
         antcolony.cpp
         ant.cpp
         food.cpp
+        pheromone.cpp
 )
 SET(PROJECT_HEADERS
         world.h
         antcolony.h
         ant.h
         food.h
+        pheromone.h
 )
 add_library(antSim SHARED)
 target_compile_features(antSim PUBLIC cxx_std_17)

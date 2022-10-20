@@ -72,6 +72,39 @@ TEST(WorldAddAnts, WhenAddingAnts_ExpectAtHomeBase)
     }
 }
 
+TEST(WorldAddAnts, WhenAddingAntAtLocation_ExpectAtGivenLocation)
+{
+    World w;
+    w.add_ant(3, 4);
+
+    EXPECT_EQ(w.ant_population, 1);
+
+    auto ant_poses = w.get_ants();
+
+    EXPECT_EQ(ant_poses[0]->x, 3);
+    EXPECT_EQ(ant_poses[0]->y, 4);
+    EXPECT_EQ(ant_poses[0]->heading, 0);
+    EXPECT_EQ(ant_poses[0]->hasFood, false);
+
+}
+
+TEST(WorldAddAnts, WhenAddingPrebuiltAnt_ExpectAtGivenState)
+{
+    Ant a{1, 2, 3};
+    World w;
+    w.add_ant(a);
+
+    EXPECT_EQ(w.ant_population, 1);
+
+    auto ant_poses = w.get_ants();
+
+    EXPECT_EQ(ant_poses[0]->x, 1);
+    EXPECT_EQ(ant_poses[0]->y, 2);
+    EXPECT_EQ(ant_poses[0]->heading, 3);
+    EXPECT_EQ(ant_poses[0]->hasFood, false);
+
+}
+
 TEST(WorldAddAnts, WhenAddingAntsDefault_ExpectAtZero)
 {
     World w;
@@ -169,7 +202,7 @@ TEST(AntBounceDynamics, GivenAntGoingOutOfRightBounds_ExpectAntToBounce)
     std::pair<double,double> bounds{1000,1000};
     a.propogate_dynamics(bounds);
 
-    double goldenX{999 + distanceTraveled*0.2675};
+    double goldenX{1000};
     double goldenY{173 + distanceTraveled*0.9636};
     double goldenHeading{PI - 1.3};
 
@@ -190,7 +223,7 @@ TEST(AntBounceDynamics, GivenAntGoingOutOfLeftBounds_ExpectAntToBounce)
     std::pair<double,double> bounds{1000,1000};
     a.propogate_dynamics(bounds);
 
-    double goldenX{0.1 + distanceTraveled*-0.8301};
+    double goldenX{0};
     double goldenY{600 + distanceTraveled*0.5577};
     double goldenHeading{PI - 2.55};
 
@@ -212,7 +245,7 @@ TEST(AntBounceDynamics, GivenAntGoingOutOfTopBounds_ExpectAntToBounce)
     a.propogate_dynamics(bounds);
 
     double goldenX{10 + distanceTraveled*0.8776};
-    double goldenY{0.05 + distanceTraveled*-0.4794};
+    double goldenY{0};
     double goldenHeading{2*PI + 0.5};
 
     EXPECT_NEAR(goldenX, a.x, NEAR_TOL);
@@ -233,7 +266,7 @@ TEST(AntBounceDynamics, GivenAntGoingOutOfBottomBounds_ExpectAntToBounce)
     a.propogate_dynamics(bounds);
 
     double goldenX{100 + distanceTraveled*-0.2272};
-    double goldenY{998 + distanceTraveled*.9738};
+    double goldenY{1000};
     double goldenHeading{2*PI - 1.8};
 
     EXPECT_NEAR(goldenX, a.x, NEAR_TOL);
@@ -408,4 +441,11 @@ TEST(AntToHome, GivenAntWithFood_ExpectAntTowardsFood)
 //    EXPECT_EQ(1, a.y);
 //    EXPECT_NEAR(.7854, a.heading, .001);
 
+}
+
+TEST(Pheromone, GivenAnAntWithFood_ExpectPheromonesAtLocation)
+{
+    Ant a{100, 10, 0};
+    World w;
+    w.add_ant(a);
 }

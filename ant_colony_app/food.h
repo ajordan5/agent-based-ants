@@ -19,7 +19,7 @@ public:
     const int get_total() const;
     std::pair<int,int> search(const Ant* ant);
 
-private:
+protected:
     std::unordered_map<int, std::unordered_set<int>> locations;
     std::pair<int,int> search_quadrant(int xAnt, int yAnt, int xLeft, int yTop, int xRight, int yBottom);
     int sideSearchDistance{20};

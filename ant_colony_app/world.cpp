@@ -27,6 +27,18 @@ std::pair<double,double> World::get_bounds() const
     return world_bounds;
 }
 
+void World::add_ant(double x, double y)
+{
+    ants.push_back(new Ant{x, y, 0.0});
+    ant_population++;
+}
+
+void World::add_ant(Ant& ant)
+{
+    ants.push_back(&ant);
+    ant_population++;
+}
+
 void World::add_many_ants(int num_of_ants)
 {
     ant_population += num_of_ants;

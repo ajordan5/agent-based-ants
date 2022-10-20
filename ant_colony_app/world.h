@@ -4,6 +4,7 @@
 #include <vector>
 #include "ant.h"
 #include "food.h"
+#include "pheromone.h"
 
 class World
 {
@@ -11,6 +12,7 @@ public:
     World();
     World(double home_x, double home_y);
     void add_ant(double x, double y);
+    void add_ant(Ant& ant);
     void add_many_ants(int num_of_ants);
     int ant_population;
     Food* food{nullptr};
