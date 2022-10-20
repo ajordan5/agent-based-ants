@@ -16,9 +16,9 @@ public:
     double heading;
     bool hasFood{false};
 
-    void propogate_dynamics();
-    void random_walk();
-    bool to_target(int targetX, int targetY);
+    void propogate_dynamics(double heading);
+    void random_walk(std::pair<double,double> bounds);
+    bool to_target(std::pair<double,double> target, std::pair<double,double> bounds);
 
 private:
     double speed{50};

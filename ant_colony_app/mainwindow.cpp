@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "./ui_mainwindow.h"
+#include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -16,9 +16,9 @@ void MainWindow::setup_sim()
 {
     timer = new QTimer(this);
     ant_sim = new World;
-    for (int i = 200; i < 400; i = i+10)
+    for (int i = 100; i < 400; i = i+10)
     {
-        for (int j = 100; j < 300; j = j+10)
+        for (int j = 100; j < 400; j = j+10)
         {
             ant_sim->food->add_food(i,j);
         }

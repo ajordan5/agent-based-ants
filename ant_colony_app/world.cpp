@@ -49,10 +49,10 @@ void World::update()
             target = food->search(a);
         }
 
-        if (target.first == -1) a->random_walk();
+        if (target.first == -1) a->random_walk(world_bounds);
         else
         {
-            bool targetClaimed = a->to_target(target.first, target.second);
+            bool targetClaimed = a->to_target(target, world_bounds);
             if (targetClaimed)
             {
                 a->hasFood ? food->remove_food(target.first, target.second)

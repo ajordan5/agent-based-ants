@@ -23,6 +23,7 @@ public:
     };
 
     const Colony* get_home() const;
+    const std::pair<double,double> get_bounds() const;
     const std::vector<Ant*> get_ants() const;
     void store_food();
     void update();
@@ -30,6 +31,7 @@ public:
 private:
     Colony homeBase;
     std::vector<Ant*> ants;
+    std::pair<double,double> world_bounds{100, 100};
 
 };
 

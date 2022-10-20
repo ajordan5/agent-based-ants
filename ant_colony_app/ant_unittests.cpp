@@ -246,7 +246,24 @@ TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingDownExpectNearestFood)
 TEST(AntToFood, GivenFoodCloseToAnt_ExpectAntAtFood)
 {
     Ant a{0,0,0};
-    a.to_target(1, 1);
+    std::pair<double,double> target{1, 1};
+    std::pair<double,double> bounds{10, 10};
+    a.to_target(target, bounds);
+
+    EXPECT_EQ(1, a.x);
+    EXPECT_EQ(1, a.y);
+    EXPECT_NEAR(.7854, a.heading, .001);
+
+}
+
+
+TEST(AntToHome, GivenAntWithFood_ExpectAntTowardsFood)
+{
+    Ant a{40,70,0};
+    a.hasFood = true;
+    std::pair<double,double> target{1, 1};
+    std::pair<double,double> bounds{10, 10};
+    a.to_target(target, bounds);
 
     EXPECT_EQ(1, a.x);
     EXPECT_EQ(1, a.y);

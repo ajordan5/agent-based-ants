@@ -11,21 +11,20 @@ Ant::Ant(double x0, double y0, double heading0) : x{x0}, y{y0}, heading{heading0
     std::srand(time(0));
 }
 
-void Ant::random_walk()
+void Ant::random_walk(std::pair<double,double> bounds)
 {
     double walk = 2*(dis(gen) - 0.5);
     headingRate = headingRate + walk * turnScale;
     heading = heading + headingRate*timeStep;
 
-    x = x + cos(heading)*speed*timeStep;
-    y = y + sin(heading)*speed*timeStep;
+    propogate_dynamics(heading);
 
 }
 
-bool Ant::to_target(int targetX, int targetY)
+bool Ant::to_target(std::pair<double,double> target, std::pair<double,double> bounds)
 {
-    double xDiff = targetX - x;
-    double yDiff = targetY - y;
+    double xDiff = target.first - x;
+    double yDiff = target.second - y;
     double distance = sqrt((xDiff)*(xDiff) + (yDiff)*(yDiff));
     double direction = atan2(yDiff , xDiff);
 
@@ -33,8 +32,8 @@ bool Ant::to_target(int targetX, int targetY)
 
     if (travelDistance > distance)
     {
-        x = targetX;
-        y = targetY;
+        x = target.first;
+        y = target.second;
         heading = direction;
         hasFood = !hasFood;
         return true;
@@ -42,10 +41,15 @@ bool Ant::to_target(int targetX, int targetY)
     else
     {
         heading = std::min(direction, maxTurn);
-        x = x + cos(heading)*speed*timeStep;
-        y = y + sin(heading)*speed*timeStep;
+        propogate_dynamics(heading);
         return false;
 
     }
+}
+
+void Ant::propogate_dynamics(double heading)
+{
+    x = x + cos(heading)*speed*timeStep;
+    y = y + sin(heading)*speed*timeStep;
 }
 
