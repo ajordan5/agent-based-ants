@@ -10,7 +10,7 @@ TEST(WorldConstructor, WhenInitializingADefaultWorld_ExpectHomeAtCenter)
     std::pair<double, double> bounds = w.get_bounds();
     double goldenX = bounds.first/2;
     double goldenY = bounds.second/2;
-    EXPECT_EQ(0, w.ant_population);
+    EXPECT_EQ(0, w.get_ant_population());
     EXPECT_EQ(goldenX, w.get_home()->x);
     EXPECT_EQ(goldenY, w.get_home()->y);
     EXPECT_EQ(0, w.get_home()->food_count);
@@ -19,7 +19,7 @@ TEST(WorldConstructor, WhenInitializingADefaultWorld_ExpectHomeAtCenter)
 TEST(WorldConstructor, WhenInitializingAWorld_ExpectHomeAtGivenLocation)
 {
     World w{1, 2};
-    EXPECT_EQ(w.ant_population, 0);
+    EXPECT_EQ(w.get_ant_population(), 0);
     EXPECT_EQ(w.get_home()->x, 1.0);
     EXPECT_EQ(w.get_home()->y, 2.0);
     EXPECT_EQ(w.get_home()->food_count, 0);
@@ -60,7 +60,7 @@ TEST(WorldAddAnts, WhenAddingAnts_ExpectAtHomeBase)
     World w{1, 2};
     w.add_many_ants(3);
 
-    EXPECT_EQ(w.ant_population, 3);
+    EXPECT_EQ(w.get_ant_population(), 3);
 
     auto ant_poses = w.get_ants();
 
@@ -77,7 +77,7 @@ TEST(WorldAddAnts, WhenAddingAntAtLocation_ExpectAtGivenLocation)
     World w;
     w.add_ant(3, 4);
 
-    EXPECT_EQ(w.ant_population, 1);
+    EXPECT_EQ(w.get_ant_population(), 1);
 
     auto ant_poses = w.get_ants();
 
@@ -94,7 +94,7 @@ TEST(WorldAddAnts, WhenAddingPrebuiltAnt_ExpectAtGivenState)
     World w;
     w.add_ant(a);
 
-    EXPECT_EQ(w.ant_population, 1);
+    EXPECT_EQ(w.get_ant_population(), 1);
 
     auto ant_poses = w.get_ants();
 
@@ -114,7 +114,7 @@ TEST(WorldAddAnts, WhenAddingAntsDefault_ExpectAtZero)
     double goldenY = bounds.second/2;
     auto ant_poses = w.get_ants();
 
-    EXPECT_EQ(w.ant_population, 8);
+    EXPECT_EQ(w.get_ant_population(), 8);
 
     for (auto a : ant_poses)
     {
@@ -278,19 +278,19 @@ TEST(AntBounceDynamics, GivenAntGoingOutOfBottomBounds_ExpectAntToBounce)
 TEST(FoodConstructor, WhenInitializingFood_ExpectEmpty)
 {
     Food f;
-    EXPECT_TRUE(f.get_locations()->empty());
+    EXPECT_TRUE(f.get_locations().empty());
 }
 
 TEST(FoodAdd, WhenAddingFood_ExpectNonEmptyAndCorrectLocations)
 {
     Food f;
-    f.add_food(1,1);
-    EXPECT_TRUE(!f.get_locations()->empty());
+    f.add(1,1);
+    EXPECT_TRUE(!f.get_locations().empty());
 
-    auto loc = *f.get_locations();
+    auto loc = f.get_locations();
     EXPECT_EQ(1, loc.size());
     EXPECT_EQ(1, loc[1].size());
-    EXPECT_TRUE(loc[1].count(1));
+    EXPECT_TRUE(f.contains(1,1));
 
 }
 
@@ -302,7 +302,7 @@ public:
     {
         for (std::vector<int> l : expected_locs)
         {
-            f.add_food(l[0], l[1]);
+            f.add(l[0], l[1]);
         }
     }
 
@@ -317,52 +317,52 @@ protected:
 
 TEST_F(PrebuiltFood, GivenPrebuiltFood_ExpectCorrectLocations)
 {
-    auto locs = *f.get_locations();
+    auto locs = f.get_locations();
     EXPECT_EQ(goldTotalFood, f.get_total());
 
     for (auto exp : expected_locs)
     {
         int x_loc = exp[0];
         int y_loc = exp[1];
-        EXPECT_TRUE(locs[x_loc].count(y_loc));
+        EXPECT_TRUE(f.contains(x_loc, y_loc));
     }
 }
 
 TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenAddingExpectCorrectLocations)
 {
-    f.add_food(1,12);
-    f.add_food(7,9);
-    auto locs = *f.get_locations();
+    f.add(1,12);
+    f.add(7,9);
+    auto locs = f.get_locations();
     EXPECT_EQ(goldTotalFood+2, f.get_total());
 
     for (auto exp : expected_locs)
     {
         int x_loc = exp[0];
         int y_loc = exp[1];
-        EXPECT_TRUE(locs[x_loc].count(y_loc));
+        EXPECT_TRUE(f.contains(x_loc, y_loc));
     }
-    EXPECT_TRUE(locs[1].count(12));
-    EXPECT_TRUE(locs[7].count(9));
+    EXPECT_TRUE(f.contains(1, 12));
+    EXPECT_TRUE(f.contains(7, 9));
 }
 
 TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenAddingDuplicatesExpectNoChange)
 {
-    f.add_food(1,1);
-    f.add_food(7,7);
-    auto locs = *f.get_locations();
+    f.add(1,1);
+    f.add(7,7);
+    auto locs = f.get_locations();
     EXPECT_EQ(goldTotalFood, f.get_total());
 
     for (auto exp : expected_locs)
     {
         int x_loc = exp[0];
         int y_loc = exp[1];
-        EXPECT_TRUE(locs[x_loc].count(y_loc));
+        EXPECT_TRUE(f.contains(x_loc, y_loc));
     }
 }
 
 TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenDeletingExpectCorrectLocations)
 {
-    auto locs = *f.get_locations();
+    auto locs = f.get_locations();
     EXPECT_EQ(goldTotalFood, f.get_total());
     EXPECT_FALSE(locs.empty());
 
@@ -370,12 +370,12 @@ TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenDeletingExpectCorrectLocations)
     {
         int x_loc = exp[0];
         int y_loc = exp[1];
-        EXPECT_TRUE(locs[x_loc].count(y_loc));
-        f.remove_food(x_loc, y_loc);
+        EXPECT_TRUE(f.contains(x_loc, y_loc));
+        f.remove(x_loc, y_loc);
     }
 
 
-    locs = *f.get_locations();
+    locs = f.get_locations();
     EXPECT_TRUE(locs.empty());
     EXPECT_EQ(0, f.get_total());
 }
@@ -383,7 +383,7 @@ TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenDeletingExpectCorrectLocations)
 TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingRightExpectNearestFood)
 {
     Ant* a = new Ant{0,0,0};
-    std::pair<int,int> result = f.search(a);
+    std::pair<int,int> result = f.search(a->x, a->y, a->heading);
     EXPECT_EQ(1, result.first);
     EXPECT_EQ(1, result.second);
 
@@ -392,7 +392,7 @@ TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingRightExpectNearestFood)
 TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingLeftExpectNearestFood)
 {
     Ant* a = new Ant{9,2,3.14};
-    std::pair<int,int> result = f.search(a);
+    std::pair<int,int> result = f.search(a->x, a->y, a->heading);
     EXPECT_EQ(7, result.first);
     EXPECT_EQ(1, result.second);
 
@@ -401,7 +401,7 @@ TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingLeftExpectNearestFood)
 TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingUpExpectNearestFood)
 {
     Ant* a = new Ant{2,4,-1.2};
-    std::pair<int,int> result = f.search(a);
+    std::pair<int,int> result = f.search(a->x, a->y, a->heading);
     EXPECT_EQ(3, result.first);
     EXPECT_EQ(2, result.second);
 
@@ -410,7 +410,7 @@ TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingUpExpectNearestFood)
 TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingDownExpectNearestFood)
 {
     Ant* a = new Ant{7,6,1.7};
-    std::pair<int,int> result = f.search(a);
+    std::pair<int,int> result = f.search(a->x, a->y, a->heading);
     EXPECT_EQ(7, result.first);
     EXPECT_EQ(7, result.second);
 }
@@ -443,9 +443,62 @@ TEST(AntToHome, GivenAntWithFood_ExpectAntTowardsFood)
 
 }
 
-TEST(Pheromone, GivenAnAntWithFood_ExpectPheromonesAtLocation)
+TEST(Pheromone, GivenAnEmptyPheromoneClassExpectNoPheromones)
 {
-    Ant a{100, 10, 0};
-    World w;
-    w.add_ant(a);
+    Pheromone p(5,5);
+
+    for (int ii = 0; ii<5; ii++)
+    {
+        for (int jj = 0; jj<5; jj++)
+        {
+            const unsigned char* pixel = p.get_pixel(ii,jj);
+
+            EXPECT_FALSE(p.contains(ii,jj));
+            EXPECT_EQ(pixel[3], 0);
+            EXPECT_EQ(pixel[2], 0);
+            EXPECT_EQ(pixel[1], 0);
+            EXPECT_EQ(pixel[0], 0);
+        }
+
+    }
+
+}
+
+TEST(Pheromone, GivenAPheromoneClassWhenPlacing_ExpectPheromonesAtLocation)
+{
+    Pheromone p(10,10);
+    p.add(5,5);
+    const unsigned char* pixel = p.get_pixel(5,5);
+
+    EXPECT_TRUE(p.contains(5,5));
+    EXPECT_EQ(pixel[3], 255);
+    EXPECT_EQ(pixel[2], 0);
+    EXPECT_EQ(pixel[1], 0);
+    EXPECT_EQ(pixel[0], 255);
+
+
+}
+
+TEST(Pheromone, GivenAPheromoneClassWhenPlacingMultiple_ExpectPheromonesAtLocation)
+{
+    Pheromone p(10,10);
+    p.add(1,1);
+    p.add(3,7);
+    const unsigned char* pixel = p.get_pixel(1,1);
+
+    EXPECT_TRUE(p.contains(1,1));
+    EXPECT_EQ(pixel[3], 255);
+    EXPECT_EQ(pixel[2], 0);
+    EXPECT_EQ(pixel[1], 0);
+    EXPECT_EQ(pixel[0], 255);
+
+    pixel = p.get_pixel(3,7);
+
+    EXPECT_TRUE(p.contains(3,7));
+    EXPECT_EQ(pixel[3], 255);
+    EXPECT_EQ(pixel[2], 0);
+    EXPECT_EQ(pixel[1], 0);
+    EXPECT_EQ(pixel[0], 255);
+
+
 }

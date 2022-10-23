@@ -20,7 +20,7 @@ void MainWindow::setup_sim()
     {
         for (int j = 700; j < 900; j = j+10)
         {
-            ant_sim->food->add_food(i,j);
+            ant_sim->get_food()->add(i,j);
         }
 
     }

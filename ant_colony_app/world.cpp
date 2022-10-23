@@ -1,12 +1,12 @@
 #include "world.h"
 
-World::World() : ant_population{0}, food{new Food}
+World::World() : antPopulation{0}, food{new Food}
 {
-    homeBase.x = world_bounds.first/2;
-    homeBase.y = world_bounds.second/2;
+    homeBase.x = worldBounds.first/2;
+    homeBase.y = worldBounds.second/2;
 }
 
-World::World(double home_x, double home_y) : ant_population{0}, food{new Food}
+World::World(double home_x, double home_y) : antPopulation{0}, food{new Food}
 {
     homeBase.x = home_x;
     homeBase.y = home_y;
@@ -17,6 +17,21 @@ const World::Colony* World::get_home() const
     return &homeBase;
 }
 
+Food* World::get_food() const
+{
+    return food;
+}
+
+const Pheromone* World::get_food_pheromones() const
+{
+    return foodPheromones;
+}
+
+double World::get_ant_population() const
+{
+    return antPopulation;
+}
+
 const std::vector<Ant*> World::get_ants() const
 {
     return ants;
@@ -24,24 +39,24 @@ const std::vector<Ant*> World::get_ants() const
 
 std::pair<double,double> World::get_bounds() const
 {
-    return world_bounds;
+    return worldBounds;
 }
 
 void World::add_ant(double x, double y)
 {
     ants.push_back(new Ant{x, y, 0.0});
-    ant_population++;
+    antPopulation++;
 }
 
 void World::add_ant(Ant& ant)
 {
     ants.push_back(&ant);
-    ant_population++;
+    antPopulation++;
 }
 
 void World::add_many_ants(int num_of_ants)
 {
-    ant_population += num_of_ants;
+    antPopulation += num_of_ants;
     for (int ii = 0; ii<num_of_ants; ii++)
     {
         ants.push_back(new Ant{homeBase.x, homeBase.y, 0.0});
@@ -64,16 +79,16 @@ void World::update()
         }
         else
         {
-            target = food->search(a);
+            target = food->search(a->x, a->y, a->heading);
         }
 
-        if (target.first == -1) a->random_walk(world_bounds);
+        if (target.first == -1) a->random_walk(worldBounds);
         else
         {
-            bool targetClaimed = a->to_target(target, world_bounds);
+            bool targetClaimed = a->to_target(target, worldBounds);
             if (targetClaimed)
             {
-                a->hasFood ? food->remove_food(target.first, target.second)
+                a->hasFood ? food->remove(target.first, target.second)
                            : store_food();
 
             }

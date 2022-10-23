@@ -50,7 +50,7 @@ void AntPainter::drawFood(QPainter* painter)
     pen.setWidth(5);
     painter->setPen(pen);
 
-    auto food_locations = *world.food->get_locations();
+    auto food_locations = world.get_food()->get_locations();
     for (auto i = food_locations.begin();  i != food_locations.end(); i++)
     {
         int x = i->first;

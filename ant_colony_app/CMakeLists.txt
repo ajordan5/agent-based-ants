@@ -26,6 +26,9 @@ SET(PROJECT_SOURCES
         ant.cpp
         food.cpp
         pheromone.cpp
+        object.cpp
+        colorhelper.cpp
+
 )
 SET(PROJECT_HEADERS
         world.h
@@ -33,6 +36,8 @@ SET(PROJECT_HEADERS
         ant.h
         food.h
         pheromone.h
+        object.h
+        colorhelper.h
 )
 add_library(antSim SHARED)
 target_compile_features(antSim PUBLIC cxx_std_17)
