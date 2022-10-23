@@ -35,7 +35,7 @@ protected:
     Colony homeBase;
     std::vector<Ant*> ants;
     std::pair<double,double> worldBounds{1000, 1000};
-    int antPopulation;
+    int antPopulation{0};
     Food* food{nullptr};
     Pheromone* foodPheromones{nullptr};
 

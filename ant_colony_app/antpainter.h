@@ -20,6 +20,7 @@ protected:
     void drawAnts(QPainter* painter);
     void drawFood(QPainter* painter);
     void drawHome(QPainter* painter);
+    void drawPheromones(QPainter* painter);
     std::pair<double,double> world_to_pixel(double x, double y);
     World world;
 };

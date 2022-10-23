@@ -1,12 +1,12 @@
 #include "world.h"
 
-World::World() : antPopulation{0}, food{new Food}
+World::World() : food{new Food}, foodPheromones{new Pheromone(worldBounds.first, worldBounds.second)}
 {
     homeBase.x = worldBounds.first/2;
     homeBase.y = worldBounds.second/2;
 }
 
-World::World(double home_x, double home_y) : antPopulation{0}, food{new Food}
+World::World(double home_x, double home_y) : food{new Food}, foodPheromones{new Pheromone(worldBounds.first, worldBounds.second)}
 {
     homeBase.x = home_x;
     homeBase.y = home_y;
@@ -75,6 +75,7 @@ void World::update()
         std::pair<double,double> target;
         if(a->hasFood)
         {
+            foodPheromones->add(a->x, a->y);
             target = {homeBase.x, homeBase.y};
         }
         else

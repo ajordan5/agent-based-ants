@@ -11,6 +11,21 @@ void AntPainter::paintEvent(QPaintEvent* event)
     drawAnts(&painter);
     drawFood(&painter);
     drawHome(&painter);
+    drawPheromones(&painter);
+}
+
+void AntPainter::drawPheromones(QPainter* painter)
+{
+    const uchar* data = world.get_food_pheromones()->get_strengths();
+    std::pair<double,double> bounds = world.get_bounds();
+    int width= bounds.first;
+    int height = bounds.second;
+    int intSize = sizeof(int);
+    int numberOfBytesPerWidth{width*intSize};
+    QImage gridImage{data,width,height,numberOfBytesPerWidth,QImage::Format_ARGB32};
+
+    painter->drawImage(QRect{0,0,this->width(),this->height()},gridImage);
+
 }
 
 void AntPainter::drawAnts(QPainter* painter)

@@ -11,7 +11,7 @@ public:
     Pheromone(size_t width, size_t height);
     const unsigned char* get_strengths() const;
     const unsigned char* get_pixel(int x, int y) const;
-    void add(int x, int y) override;
+    void add(double x, double y) override;
     void set_color(int r, int g, int b);
 
 protected:

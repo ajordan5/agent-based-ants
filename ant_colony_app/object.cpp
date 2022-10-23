@@ -5,8 +5,10 @@ Object::Object()
 
 }
 
-void Object::add(int x, int y)
+void Object::add(double x, double y)
 {
+    x = int(x);
+    y = int(y);
     if(locations.count(x) && locations[x].count(y)) return;
     total++;
     locations[x].insert(y);

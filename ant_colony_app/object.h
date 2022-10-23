@@ -10,7 +10,7 @@ class Object
 {
 public:
     Object();
-    virtual void add(int x, int y);
+    virtual void add(double x, double y);
     void remove(int x, int y);
     std::unordered_map<int, std::unordered_set<int>> get_locations() const;
     int get_total() const;

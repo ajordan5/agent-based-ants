@@ -16,8 +16,10 @@ const unsigned char* Pheromone::get_pixel(int x, int y) const
     return reinterpret_cast<const unsigned char*>(&strengths[arrayIndex]);
 }
 
-void Pheromone::add(int x, int y)
+void Pheromone::add(double x, double y)
 {
+    x = int(x);
+    y = int(y);
     if(locations.count(x) && locations[x].count(y)) return;
     total++;
     locations[x].insert(y);

@@ -4,9 +4,9 @@ void set_rgba(int* coordinate, unsigned char r, unsigned char g, unsigned char b
 {
     unsigned char* rgba = reinterpret_cast<unsigned char*>(coordinate);
     rgba[3] = alpha;
-    rgba[2] = b;
+    rgba[2] = r;
     rgba[1] = g;
-    rgba[0] = r;
+    rgba[0] = b;
 }
 
 int grid_to_array_index(int width, int height, int xIdx, int yIdx)
