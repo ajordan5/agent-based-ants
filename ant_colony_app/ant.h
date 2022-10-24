@@ -23,9 +23,9 @@ public:
     bool to_target(std::pair<double,double> target, std::pair<double,double> bounds);
 
 protected:
-    double speed{50};
+    double speed{15};
     double headingRate{0};
-    double turnScale{0.15};
+    double turnScale{0.01};
     double timeStep{0.1};
     double maxTurn{1};
 

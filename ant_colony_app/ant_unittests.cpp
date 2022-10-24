@@ -194,7 +194,7 @@ TEST(AntDynamics, GivenAntNotAtZeroWhenPropogatingDynamics_ExpectCorrectLocation
 TEST(AntBounceDynamics, GivenAntGoingOutOfRightBounds_ExpectAntToBounce)
 {
     AntSpy a;
-    a.x = 999;
+    a.x = 999.9;
     a.y = 173;
     a.heading = 1.3;
     double distanceTraveled = a.getDistanceTraveled();
@@ -258,7 +258,7 @@ TEST(AntBounceDynamics, GivenAntGoingOutOfBottomBounds_ExpectAntToBounce)
 {
     AntSpy a;
     a.x = 100;
-    a.y = 998;
+    a.y = 999;
     a.heading = 1.8;
     double distanceTraveled = a.getDistanceTraveled();
 
@@ -472,9 +472,9 @@ TEST(Pheromone, GivenAPheromoneClassWhenPlacing_ExpectPheromonesAtLocation)
 
     EXPECT_TRUE(p.contains(5,5));
     EXPECT_EQ(pixel[3], 255);
-    EXPECT_EQ(pixel[2], 0);
+    EXPECT_EQ(pixel[2], 255);
     EXPECT_EQ(pixel[1], 0);
-    EXPECT_EQ(pixel[0], 255);
+    EXPECT_EQ(pixel[0], 0);
 
 
 }
@@ -488,17 +488,17 @@ TEST(Pheromone, GivenAPheromoneClassWhenPlacingMultiple_ExpectPheromonesAtLocati
 
     EXPECT_TRUE(p.contains(1,1));
     EXPECT_EQ(pixel[3], 255);
-    EXPECT_EQ(pixel[2], 0);
+    EXPECT_EQ(pixel[2], 255);
     EXPECT_EQ(pixel[1], 0);
-    EXPECT_EQ(pixel[0], 255);
+    EXPECT_EQ(pixel[0], 0);
 
     pixel = p.get_pixel(3,7);
 
     EXPECT_TRUE(p.contains(3,7));
     EXPECT_EQ(pixel[3], 255);
-    EXPECT_EQ(pixel[2], 0);
+    EXPECT_EQ(pixel[2], 255);
     EXPECT_EQ(pixel[1], 0);
-    EXPECT_EQ(pixel[0], 255);
+    EXPECT_EQ(pixel[0], 0);
 
 
 }
