@@ -70,6 +70,7 @@ void World::store_food()
 
 void World::update()
 {
+    foodPheromones->update();
     for (auto a : ants)
     {
         std::pair<double,double> target;

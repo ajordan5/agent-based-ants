@@ -13,6 +13,8 @@ public:
     const unsigned char* get_pixel(int x, int y) const;
     void add(double x, double y) override;
     void set_color(int r, int g, int b);
+    unsigned char get_decay_rate() const;
+    void update();
 
 protected:
     size_t width{0};
@@ -21,6 +23,7 @@ protected:
     int green{0};
     int blue{0};
     std::vector<int> strengths;
+    unsigned char decayRate{1};
 };
 
 #endif // PHEROMONE_H

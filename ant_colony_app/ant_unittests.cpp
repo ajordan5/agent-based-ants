@@ -502,3 +502,54 @@ TEST(Pheromone, GivenAPheromoneClassWhenPlacingMultiple_ExpectPheromonesAtLocati
 
 
 }
+
+TEST(Pheromone, GivenAPheromoneClassWhenUpdating_ExpectPheromonesToDecay)
+{
+    Pheromone p(10,10);
+    p.add(5,5);
+    const unsigned char* pixel = p.get_pixel(5,5);
+    p.update();
+    unsigned char decayRate = p.get_decay_rate();
+
+    EXPECT_TRUE(p.contains(5,5));
+    EXPECT_EQ(pixel[3], 255-decayRate);
+    EXPECT_EQ(pixel[2], 255);
+    EXPECT_EQ(pixel[1], 0);
+    EXPECT_EQ(pixel[0], 0);
+}
+
+TEST(Pheromone, GivenAPheromoneClassWhenUpdatingMultiple_ExpectPheromonesToDecay)
+{
+    Pheromone p(10,10);
+    p.add(5,5);
+    const unsigned char* pixel = p.get_pixel(5,5);
+    p.update();
+    p.update();
+    unsigned char decayRate = p.get_decay_rate();
+
+    EXPECT_TRUE(p.contains(5,5));
+    EXPECT_EQ(pixel[3], 255-2*decayRate);
+    EXPECT_EQ(pixel[2], 255);
+    EXPECT_EQ(pixel[1], 0);
+    EXPECT_EQ(pixel[0], 0);
+
+}
+
+TEST(Pheromone, GivenAPheromoneWhenCompletelyDecayed_ExpectPheromonesToBeRemoved)
+{
+    Pheromone p(10,10);
+    p.add(5,5);
+    const unsigned char* pixel = p.get_pixel(5,5);
+    unsigned char decayRate = p.get_decay_rate();
+    for(int i = 0; i < (255 / decayRate + 1); i++)
+        p.update();
+
+
+    EXPECT_FALSE(p.contains(5,5));
+    EXPECT_EQ(pixel[3], 0);
+    EXPECT_EQ(pixel[2], 255);
+    EXPECT_EQ(pixel[1], 0);
+    EXPECT_EQ(pixel[0], 0);
+
+
+}
