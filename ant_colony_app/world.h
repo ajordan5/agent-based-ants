@@ -27,8 +27,7 @@ public:
     const Pheromone* get_food_pheromones() const;
     std::pair<double,double> get_bounds() const;
     const std::vector<Ant*> get_ants() const;
-    double get_ant_population() const;
-    void store_food();
+    double get_ant_population() const;    
     void update();
 
 protected:
@@ -38,6 +37,9 @@ protected:
     int antPopulation{0};
     Food* food{nullptr};
     Pheromone* foodPheromones{nullptr};
+    Pheromone* homePheromones{nullptr};
+    void store_food();
+    void to_pheromones(Ant* ant);
 
 };
 

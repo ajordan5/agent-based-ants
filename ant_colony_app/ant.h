@@ -21,6 +21,7 @@ public:
     void propogate_dynamics(std::pair<double,double> bounds);
     void random_walk(std::pair<double,double> bounds);
     bool to_target(std::pair<double,double> target, std::pair<double,double> bounds);
+    void heading_to_target(std::pair<double,double> target, std::pair<double,double> bounds);
 
 protected:
     double speed{15};

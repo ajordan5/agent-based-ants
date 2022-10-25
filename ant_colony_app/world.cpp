@@ -1,12 +1,16 @@
 #include "world.h"
 
-World::World() : food{new Food}, foodPheromones{new Pheromone(worldBounds.first, worldBounds.second)}
+World::World()
+    : food{new Food}, foodPheromones{new Pheromone(worldBounds.first, worldBounds.second)},
+      homePheromones{new Pheromone(worldBounds.first, worldBounds.second)}
 {
     homeBase.x = worldBounds.first/2;
     homeBase.y = worldBounds.second/2;
 }
 
-World::World(double home_x, double home_y) : food{new Food}, foodPheromones{new Pheromone(worldBounds.first, worldBounds.second)}
+World::World(double home_x, double home_y)
+    : food{new Food}, foodPheromones{new Pheromone(worldBounds.first, worldBounds.second)},
+      homePheromones{new Pheromone(worldBounds.first, worldBounds.second)}
 {
     homeBase.x = home_x;
     homeBase.y = home_y;
@@ -68,6 +72,23 @@ void World::store_food()
     homeBase.food_count++;
 }
 
+void World::to_pheromones(Ant* ant)
+{
+    Pheromone* targetPheromone;
+    ant->hasFood ? targetPheromone = foodPheromones :
+            targetPheromone = homePheromones;
+    std::pair<double,double> target = targetPheromone->search(ant->x, ant->y, ant->heading);
+
+    if (target.first == -1)
+    {
+        ant->random_walk(worldBounds);
+    }
+    else
+    {
+        ant->heading_to_target(target, worldBounds);
+    }
+}
+
 void World::update()
 {
     foodPheromones->update();
@@ -84,7 +105,10 @@ void World::update()
             target = food->search(a->x, a->y, a->heading);
         }
 
-        if (target.first == -1) a->random_walk(worldBounds);
+        if (target.first == -1)
+        {
+            to_pheromones(a);
+        }
         else
         {
             bool targetClaimed = a->to_target(target, worldBounds);
@@ -94,8 +118,6 @@ void World::update()
                            : store_food();
 
             }
-
-
 
         }
     }

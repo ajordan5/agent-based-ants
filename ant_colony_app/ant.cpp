@@ -47,6 +47,18 @@ bool Ant::to_target(std::pair<double,double> target, std::pair<double,double> bo
     }
 }
 
+void Ant::heading_to_target(std::pair<double,double> target, std::pair<double,double> bounds)
+{
+    double xDiff = target.first - x;
+    double yDiff = target.second - y;
+    double direction = atan2(yDiff , xDiff);
+
+    heading = std::min(direction, maxTurn);
+    propogate_dynamics(bounds);
+
+
+}
+
 void Ant::propogate_dynamics(std::pair<double,double> bounds)
 {
     x = x + cos(heading)*speed*timeStep;
