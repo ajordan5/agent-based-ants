@@ -25,7 +25,7 @@ public:
 protected:
     double speed{15};
     double headingRate{0};
-    double turnScale{0.01};
+    double turnScale{0.9};
     double timeStep{0.1};
     double maxTurn{1};
 

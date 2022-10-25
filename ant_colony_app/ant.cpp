@@ -14,7 +14,7 @@ Ant::Ant(double x0, double y0, double heading0) : x{x0}, y{y0}, heading{heading0
 void Ant::random_walk(std::pair<double,double> bounds)
 {
     double walk = 2*(dis(gen) - 0.5);
-    headingRate = headingRate + walk * turnScale;
+    headingRate = walk * turnScale;
     heading = heading + headingRate*timeStep;
 
     propogate_dynamics(bounds);
