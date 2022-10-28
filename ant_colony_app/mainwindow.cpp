@@ -24,11 +24,7 @@ void MainWindow::setup_sim()
         }
 
     }
-    ant_sim->add_many_ants(70);
-
-//    ant_sim->food->add_food(10,10);
-//    ant_sim->food->add_food(70,40);
-//    ant_sim->food->add_food(100,0);
+    ant_sim->add_many_ants(200);
 }
 
 void MainWindow::update_sim()

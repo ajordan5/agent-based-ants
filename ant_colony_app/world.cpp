@@ -6,6 +6,7 @@ World::World()
 {
     homeBase.x = worldBounds.first/2;
     homeBase.y = worldBounds.second/2;
+    homePheromones->set_color(105, 255, 180);
 }
 
 World::World(double home_x, double home_y)
@@ -14,6 +15,7 @@ World::World(double home_x, double home_y)
 {
     homeBase.x = home_x;
     homeBase.y = home_y;
+    homePheromones->set_color(255, 175, 180);
 }
 
 const World::Colony* World::get_home() const
@@ -29,6 +31,11 @@ Food* World::get_food() const
 const Pheromone* World::get_food_pheromones() const
 {
     return foodPheromones;
+}
+
+const Pheromone* World::get_home_pheromones() const
+{
+    return homePheromones;
 }
 
 double World::get_ant_population() const
@@ -75,8 +82,8 @@ void World::store_food()
 void World::to_pheromones(Ant* ant)
 {
     Pheromone* targetPheromone;
-    ant->hasFood ? targetPheromone = foodPheromones :
-            targetPheromone = homePheromones;
+    ant->hasFood ? targetPheromone = homePheromones :
+            targetPheromone = foodPheromones;
     std::pair<double,double> target = targetPheromone->search(ant->x, ant->y, ant->heading);
 
     if (target.first == -1)
@@ -89,19 +96,35 @@ void World::to_pheromones(Ant* ant)
     }
 }
 
+std::pair<double,double> World::to_home(Ant* ant)
+{
+    double xDiff = homeBase.x - ant->x;
+    double yDiff = homeBase.y- ant->y;
+    double distanceToHome = sqrt((xDiff)*(xDiff) + (yDiff)*(yDiff));
+
+    std::pair<double,double> target{-1,-1};
+    if (distanceToHome < homeSearchRadius)
+    {
+        target = {homeBase.x, homeBase.y};
+    }
+    return target;
+}
+
 void World::update()
 {
     foodPheromones->update();
+    homePheromones->update();
     for (auto a : ants)
     {
         std::pair<double,double> target;
         if(a->hasFood)
         {
             foodPheromones->add(a->x, a->y);
-            target = {homeBase.x, homeBase.y};
+            target = to_home(a);
         }
         else
         {
+            homePheromones->add(a->x, a->y);
             target = food->search(a->x, a->y, a->heading);
         }
 

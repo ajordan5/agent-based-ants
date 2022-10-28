@@ -24,7 +24,7 @@ public:
     void heading_to_target(std::pair<double,double> target, std::pair<double,double> bounds);
 
 protected:
-    double speed{15};
+    double speed{5};
     double headingRate{0};
     double turnScale{0.9};
     double timeStep{0.1};

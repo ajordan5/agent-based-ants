@@ -8,6 +8,7 @@ AntPainter::AntPainter(QWidget* parent) : QWidget(parent)
 void AntPainter::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
     drawAnts(&painter);
     drawFood(&painter);
     drawHome(&painter);
@@ -16,15 +17,18 @@ void AntPainter::paintEvent(QPaintEvent* event)
 
 void AntPainter::drawPheromones(QPainter* painter)
 {
-    const uchar* data = world.get_food_pheromones()->get_strengths();
+    const uchar* foodData = world.get_food_pheromones()->get_strengths();
+    const uchar* homeData = world.get_home_pheromones()->get_strengths();
     std::pair<double,double> bounds = world.get_bounds();
     int width= bounds.first;
     int height = bounds.second;
     int intSize = sizeof(int);
     int numberOfBytesPerWidth{width*intSize};
-    QImage gridImage{data,width,height,numberOfBytesPerWidth,QImage::Format_ARGB32};
+    QImage foodPheromoneImage{foodData,width,height,numberOfBytesPerWidth,QImage::Format_ARGB32};
+    QImage homePheromoneImage{homeData,width,height,numberOfBytesPerWidth,QImage::Format_ARGB32};
 
-    painter->drawImage(QRect{0,0,this->width(),this->height()},gridImage);
+    painter->drawImage(QRect{0,0,this->width(),this->height()},foodPheromoneImage);
+    painter->drawImage(QRect{0,0,this->width(),this->height()},homePheromoneImage);
 
 }
 

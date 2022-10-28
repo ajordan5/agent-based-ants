@@ -25,6 +25,7 @@ public:
     const Colony* get_home() const;
     Food* get_food() const;
     const Pheromone* get_food_pheromones() const;
+    const Pheromone* get_home_pheromones() const;
     std::pair<double,double> get_bounds() const;
     const std::vector<Ant*> get_ants() const;
     double get_ant_population() const;    
@@ -32,6 +33,7 @@ public:
 
 protected:
     Colony homeBase;
+    double homeSearchRadius{10};
     std::vector<Ant*> ants;
     std::pair<double,double> worldBounds{1000, 1000};
     int antPopulation{0};
@@ -40,6 +42,7 @@ protected:
     Pheromone* homePheromones{nullptr};
     void store_food();
     void to_pheromones(Ant* ant);
+    std::pair<double,double> to_home(Ant* ant);
 
 };
 

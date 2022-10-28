@@ -2,9 +2,9 @@
 
 Pheromone::Pheromone(size_t w, size_t h) : width{w}, height{h}
 {
-    strengths.resize(w*h);
-    sideSearchDistance = 2;
-    forwardSearchDistance = 3;
+    strengths.resize((w+1)*(h+1));
+    sideSearchDistance = 4;
+    forwardSearchDistance = 4;
 }
 
 const unsigned char* Pheromone::get_strengths() const

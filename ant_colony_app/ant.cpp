@@ -30,7 +30,7 @@ bool Ant::to_target(std::pair<double,double> target, std::pair<double,double> bo
 
     double travelDistance = speed*timeStep;
 
-    if (travelDistance > distanceToTarget)
+    if (travelDistance >= distanceToTarget)
     {
         x = target.first;
         y = target.second;

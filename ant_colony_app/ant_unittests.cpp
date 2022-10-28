@@ -258,7 +258,7 @@ TEST(AntBounceDynamics, GivenAntGoingOutOfBottomBounds_ExpectAntToBounce)
 {
     AntSpy a;
     a.x = 100;
-    a.y = 999;
+    a.y = 999.9;
     a.heading = 1.8;
     double distanceTraveled = a.getDistanceTraveled();
 
@@ -417,7 +417,7 @@ TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingDownExpectNearestFood)
 
 TEST(AntToFood, GivenFoodCloseToAnt_ExpectAntAtFood)
 {
-    Ant a{0,0,0};
+    Ant a{0.9,0.9,0};
     std::pair<double,double> target{1, 1};
     std::pair<double,double> bounds{10, 10};
     a.to_target(target, bounds);
