@@ -34,13 +34,15 @@ bool Ant::to_target(std::pair<double,double> target, std::pair<double,double> bo
     {
         x = target.first;
         y = target.second;
-        heading = direction;
+        heading = heading - PI;
         hasFood = !hasFood;
         return true;
     }
     else
     {
-        heading = std::min(direction, maxTurn);
+        double angleSign{direction >= 0 ? 1.0 : -1.0};
+        abs(direction - heading) > maxTurn ? heading =  angleSign*maxTurn
+                                            : heading = direction;
         propogate_dynamics(bounds);
         return false;
 

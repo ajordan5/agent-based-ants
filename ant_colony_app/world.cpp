@@ -6,7 +6,7 @@ World::World()
 {
     homeBase.x = worldBounds.first/2;
     homeBase.y = worldBounds.second/2;
-    homePheromones->set_color(105, 255, 180);
+    homePheromones->set_color(0, 100, 0);
 }
 
 World::World(double home_x, double home_y)

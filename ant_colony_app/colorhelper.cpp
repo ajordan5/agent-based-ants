@@ -29,3 +29,13 @@ bool decay_alpha(int* coordinate, unsigned char decayRate)
         return false;
     }
 }
+
+void map_strength_to_alpha(int* pixel, double pheromoneStrength, double initPheromoneStrength)
+{
+    unsigned char* rgba = reinterpret_cast<unsigned char*>(pixel);
+    if (pheromoneStrength >= initPheromoneStrength)
+        rgba[3] = 255;
+    else
+        rgba[3] = int(pheromoneStrength/initPheromoneStrength * 255);
+
+}

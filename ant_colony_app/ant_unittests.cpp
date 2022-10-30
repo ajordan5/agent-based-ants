@@ -4,7 +4,7 @@
 #define NEAR_TOL 0.001
 #define PI 3.14159
 
-TEST(WorldConstructor, WhenInitializingADefaultWorld_ExpectHomeAtCenter)
+TEST(WorldConstructor, WhenInitializingADefaultWorld_ExpectEmptyHomeAtCenter)
 {
     World w{};
     std::pair<double, double> bounds = w.get_bounds();
@@ -28,13 +28,10 @@ TEST(WorldConstructor, WhenInitializingAWorld_ExpectHomeAtGivenLocation)
 TEST(AntConstructor, WhenInitializingAnt_ExpectPoseAtGivenLocation)
 {
     Ant* a = new Ant{1.0,2.0,3.0};
-    double x = a->x;
-    double y = a->y;
-    double heading = a->heading;
 
-    EXPECT_EQ(x, 1.0);
-    EXPECT_EQ(y, 2.0);
-    EXPECT_EQ(heading, 3.0);
+    EXPECT_EQ(a->x, 1.0);
+    EXPECT_EQ(a->y, 2.0);
+    EXPECT_EQ(a->heading, 3.0);
 
     delete a;
 
@@ -62,7 +59,7 @@ TEST(WorldAddAnts, WhenAddingAnts_ExpectAtHomeBase)
 
     EXPECT_EQ(w.get_ant_population(), 3);
 
-    auto ant_poses = w.get_ants();
+    std::vector<Ant*> ant_poses = w.get_ants();
 
     for (auto a : ant_poses)
     {
@@ -127,13 +124,14 @@ TEST(WorldAddAnts, WhenAddingAntsDefault_ExpectAtZero)
 class AntSpy : public Ant
 {
 public:
-    double getDistanceTraveled() {return speed*timeStep;}
+    double get_distance_traveled() {return speed*timeStep;}
+    double get_max_turn() {return maxTurn;}
 };
 
 TEST(AntDynamics, GivenDefaultAntWhenPropogatingDynamics_ExpectMoveInX)
 {
     AntSpy a;
-    double distanceTraveled = a.getDistanceTraveled();
+    double distanceTraveled = a.get_distance_traveled();
     a.propogate_dynamics({1000,1000});
 
     double goldenX{distanceTraveled};
@@ -148,7 +146,7 @@ TEST(AntDynamics, GivenAntPointingDownWhenPropogatingDynamics_ExpectMoveInY)
 {
     AntSpy a;
     a.heading = 1.5707;
-    double distanceTraveled = a.getDistanceTraveled();
+    double distanceTraveled = a.get_distance_traveled();
     a.propogate_dynamics({1000,1000});
 
     double goldenY{distanceTraveled};
@@ -163,7 +161,7 @@ TEST(AntDynamics, GivenPointedAntWhenPropogatingDynamics_ExpectCorrectLocation)
 {
     AntSpy a;
     a.heading = 0.8;
-    double distanceTraveled = a.getDistanceTraveled();
+    double distanceTraveled = a.get_distance_traveled();
     a.propogate_dynamics({1000,1000});
 
     double goldenX{distanceTraveled*0.6967};
@@ -180,7 +178,7 @@ TEST(AntDynamics, GivenAntNotAtZeroWhenPropogatingDynamics_ExpectCorrectLocation
     a.x = 56;
     a.y = 173;
     a.heading = 0.3;
-    double distanceTraveled = a.getDistanceTraveled();
+    double distanceTraveled = a.get_distance_traveled();
     a.propogate_dynamics({1000,1000});
 
     double goldenX{56 + distanceTraveled*0.9553};
@@ -197,7 +195,7 @@ TEST(AntBounceDynamics, GivenAntGoingOutOfRightBounds_ExpectAntToBounce)
     a.x = 999.9;
     a.y = 173;
     a.heading = 1.3;
-    double distanceTraveled = a.getDistanceTraveled();
+    double distanceTraveled = a.get_distance_traveled();
 
     std::pair<double,double> bounds{1000,1000};
     a.propogate_dynamics(bounds);
@@ -218,7 +216,7 @@ TEST(AntBounceDynamics, GivenAntGoingOutOfLeftBounds_ExpectAntToBounce)
     a.x = 0.1;
     a.y = 600;
     a.heading = 2.55;
-    double distanceTraveled = a.getDistanceTraveled();
+    double distanceTraveled = a.get_distance_traveled();
 
     std::pair<double,double> bounds{1000,1000};
     a.propogate_dynamics(bounds);
@@ -239,7 +237,7 @@ TEST(AntBounceDynamics, GivenAntGoingOutOfTopBounds_ExpectAntToBounce)
     a.x = 10;
     a.y = 0.05;
     a.heading = -0.5;
-    double distanceTraveled = a.getDistanceTraveled();
+    double distanceTraveled = a.get_distance_traveled();
 
     std::pair<double,double> bounds{1000,1000};
     a.propogate_dynamics(bounds);
@@ -260,7 +258,7 @@ TEST(AntBounceDynamics, GivenAntGoingOutOfBottomBounds_ExpectAntToBounce)
     a.x = 100;
     a.y = 999.9;
     a.heading = 1.8;
-    double distanceTraveled = a.getDistanceTraveled();
+    double distanceTraveled = a.get_distance_traveled();
 
     std::pair<double,double> bounds{1000,1000};
     a.propogate_dynamics(bounds);
@@ -386,6 +384,7 @@ TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingRightExpectNearestFood)
     std::pair<int,int> result = f.search(a->x, a->y, a->heading);
     EXPECT_EQ(1, result.first);
     EXPECT_EQ(1, result.second);
+    delete a;
 
 }
 
@@ -395,6 +394,7 @@ TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingLeftExpectNearestFood)
     std::pair<int,int> result = f.search(a->x, a->y, a->heading);
     EXPECT_EQ(7, result.first);
     EXPECT_EQ(1, result.second);
+    delete a;
 
 }
 
@@ -404,6 +404,7 @@ TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingUpExpectNearestFood)
     std::pair<int,int> result = f.search(a->x, a->y, a->heading);
     EXPECT_EQ(3, result.first);
     EXPECT_EQ(2, result.second);
+    delete a;
 
 }
 
@@ -413,9 +414,10 @@ TEST_F(PrebuiltFood, GivenPrebuiltFood_WhenSearchingDownExpectNearestFood)
     std::pair<int,int> result = f.search(a->x, a->y, a->heading);
     EXPECT_EQ(7, result.first);
     EXPECT_EQ(7, result.second);
+    delete a;
 }
 
-TEST(AntToFood, GivenFoodCloseToAnt_ExpectAntAtFood)
+TEST(AntToTarget, GivenTargetCloseToAnt_ExpectAntAtTarget)
 {
     Ant a{0.9,0.9,0};
     std::pair<double,double> target{1, 1};
@@ -428,22 +430,26 @@ TEST(AntToFood, GivenFoodCloseToAnt_ExpectAntAtFood)
 
 }
 
-
-TEST(AntToHome, GivenAntWithFood_ExpectAntTowardsFood)
+TEST(AntToTarget, GivenTargetFarFromAnt_ExpectAntTowardsTarget)
 {
-    Ant a{40,70,0};
-    a.hasFood = true;
+    AntSpy a;
+    a.x = 40;
+    a.y = 70;
+    a.heading = -1.5;
     std::pair<double,double> target{1, 1};
-    std::pair<double,double> bounds{10, 10};
+    std::pair<double,double> bounds{100, 100};
     a.to_target(target, bounds);
 
-//    EXPECT_EQ(1, a.x);
-//    EXPECT_EQ(1, a.y);
-//    EXPECT_NEAR(.7854, a.heading, .001);
+    double direction = -2.0852;
+    double travelDistance = a.get_distance_traveled();
+
+    EXPECT_NEAR(a.x, 40 + cos(direction)*travelDistance, NEAR_TOL);
+    EXPECT_NEAR(a.y, 70 + sin(direction)*travelDistance, NEAR_TOL);
+    EXPECT_NEAR(direction, a.heading, NEAR_TOL);
 
 }
 
-TEST(Pheromone, GivenAnEmptyPheromoneClassExpectNoPheromones)
+TEST(Pheromone, GivenAnEmptyPheromoneClassExpectEmptyRgbaBufferNoPheromones)
 {
     Pheromone p(5,5);
 
@@ -464,7 +470,23 @@ TEST(Pheromone, GivenAnEmptyPheromoneClassExpectNoPheromones)
 
 }
 
-TEST(Pheromone, GivenAPheromoneClassWhenPlacing_ExpectPheromonesAtLocation)
+TEST(Pheromone, GivenAnEmptyPheromoneClassExpectEmptyPheromoneStrengths)
+{
+    Pheromone p(5,5);
+
+    for (int ii = 0; ii<5; ii++)
+    {
+        for (int jj = 0; jj<5; jj++)
+        {
+            double strength = p.get_strength(ii,jj);
+            EXPECT_EQ(strength, 0);
+        }
+
+    }
+
+}
+
+TEST(Pheromone, GivenAPheromoneClassWhenPlacing_ExpectPheromonesInImageBuffer)
 {
     Pheromone p(10,10);
     p.add(5,5);
@@ -476,10 +498,50 @@ TEST(Pheromone, GivenAPheromoneClassWhenPlacing_ExpectPheromonesAtLocation)
     EXPECT_EQ(pixel[1], 0);
     EXPECT_EQ(pixel[0], 0);
 
+}
+
+TEST(Pheromone, GivenAPheromoneClassWhenPlacing_ExpectNewPheromoneInGrid)
+{
+    Pheromone p(10,10);
+    p.add(5,5);
+    double strength = p.get_strength(5,5);
+    double initStrength = p.get_init_strength();
+
+    EXPECT_TRUE(p.contains(5,5));
+    EXPECT_EQ(initStrength, strength);
 
 }
 
-TEST(Pheromone, GivenAPheromoneClassWhenPlacingMultiple_ExpectPheromonesAtLocation)
+TEST(Pheromone, GivenAPheromoneClassWhenPlacingInSameGrid_ExpectStackedPheromoneStrengthInGrid)
+{
+    Pheromone p(10,10);
+    for (int i = 0; i<5; i++)
+        p.add(5,5);
+    double strength = p.get_strength(5,5);
+    double initStrength = p.get_init_strength();
+
+    EXPECT_TRUE(p.contains(5,5));
+    EXPECT_EQ(5*initStrength, strength);
+
+}
+
+TEST(Pheromone, GivenAPheromoneClassWhenPlacingMultiple_ExpectPheromonesInGrid)
+{
+    Pheromone p(10,10);
+    p.add(1,1);
+    p.add(3,7);
+    double strength1 = p.get_strength(1,1);
+    double strength2 = p.get_strength(3,7);
+    double initStrength = p.get_init_strength();
+
+    EXPECT_TRUE(p.contains(1,1));
+    EXPECT_EQ(initStrength, strength1);
+    EXPECT_TRUE(p.contains(3,7));
+    EXPECT_EQ(initStrength, strength2);
+
+}
+
+TEST(Pheromone, GivenAPheromoneClassWhenPlacingMultiple_ExpectPheromonesInImageBuffer)
 {
     Pheromone p(10,10);
     p.add(1,1);
@@ -500,56 +562,117 @@ TEST(Pheromone, GivenAPheromoneClassWhenPlacingMultiple_ExpectPheromonesAtLocati
     EXPECT_EQ(pixel[1], 0);
     EXPECT_EQ(pixel[0], 0);
 
-
 }
 
 TEST(Pheromone, GivenAPheromoneClassWhenUpdating_ExpectPheromonesToDecay)
 {
     Pheromone p(10,10);
     p.add(5,5);
-    const unsigned char* pixel = p.get_pixel(5,5);
     p.update();
+    double strength = p.get_strength(5, 5);
+    double initStrength = p.get_init_strength();
     unsigned char decayRate = p.get_decay_rate();
 
     EXPECT_TRUE(p.contains(5,5));
-    EXPECT_EQ(pixel[3], 255-decayRate);
-    EXPECT_EQ(pixel[2], 255);
-    EXPECT_EQ(pixel[1], 0);
-    EXPECT_EQ(pixel[0], 0);
+    EXPECT_EQ(initStrength - decayRate, strength);
+//    EXPECT_EQ(pixel[3], 255-decayRate);
+//    EXPECT_EQ(pixel[2], 255);
+//    EXPECT_EQ(pixel[1], 0);
+//    EXPECT_EQ(pixel[0], 0);
 }
 
-TEST(Pheromone, GivenAPheromoneClassWhenUpdatingMultiple_ExpectPheromonesToDecay)
+TEST(Pheromone, GivenAPheromoneClassWhenUpdatingMultipleTimes_ExpectPheromonesToDecay)
 {
     Pheromone p(10,10);
-    p.add(5,5);
-    const unsigned char* pixel = p.get_pixel(5,5);
-    p.update();
-    p.update();
+    p.add(2,3);
+    for (int i = 0; i < 3; i++)
+        p.update();
+    double strength = p.get_strength(2, 3);
+    double initStrength = p.get_init_strength();
     unsigned char decayRate = p.get_decay_rate();
 
-    EXPECT_TRUE(p.contains(5,5));
-    EXPECT_EQ(pixel[3], 255-2*decayRate);
-    EXPECT_EQ(pixel[2], 255);
-    EXPECT_EQ(pixel[1], 0);
-    EXPECT_EQ(pixel[0], 0);
+    EXPECT_TRUE(p.contains(2,3));
+    EXPECT_EQ(initStrength - 3*decayRate, strength);
 
 }
 
 TEST(Pheromone, GivenAPheromoneWhenCompletelyDecayed_ExpectPheromonesToBeRemoved)
 {
     Pheromone p(10,10);
-    p.add(5,5);
-    const unsigned char* pixel = p.get_pixel(5,5);
+    p.add(6,7);
     unsigned char decayRate = p.get_decay_rate();
-    for(int i = 0; i < (255 / decayRate + 1); i++)
+    double initStrength = p.get_init_strength();
+    for(int i = 0; i < (initStrength / decayRate); i++)
         p.update();
+    double strength = p.get_strength(6,7);
 
 
     EXPECT_FALSE(p.contains(5,5));
-    EXPECT_EQ(pixel[3], 0);
-    EXPECT_EQ(pixel[2], 255);
-    EXPECT_EQ(pixel[1], 0);
-    EXPECT_EQ(pixel[0], 0);
+    EXPECT_EQ(0, strength);
 
+}
+
+TEST(PheromoneToAlphaMap, GivenInitStrengthPheromone_ExpectMaxAlphaInImageBuffer)
+{
+    int pixel{0};
+    double pheromoneStrength{100};
+    double initPheromoneStrength{100};
+
+    map_strength_to_alpha(&pixel, pheromoneStrength, initPheromoneStrength);
+    unsigned char* rgba = reinterpret_cast<unsigned char*>(&pixel);
+
+    EXPECT_EQ(255, rgba[3]);
+
+}
+
+TEST(PheromoneToAlphaMap, GivenHalfStrengthPheromone_ExpectHalfMaxAlphaInImageBuffer)
+{
+    int pixel{0};
+    double pheromoneStrength{50};
+    double initPheromoneStrength{100};
+
+    map_strength_to_alpha(&pixel, pheromoneStrength, initPheromoneStrength);
+    unsigned char* rgba = reinterpret_cast<unsigned char*>(&pixel);
+
+    EXPECT_EQ(127, rgba[3]);
+
+}
+
+TEST(PheromoneToAlphaMap, GivenZeroStrengthPheromone_ExpectZeroAlphaInImageBuffer)
+{
+    int pixel{0};
+    double pheromoneStrength{0};
+    double initPheromoneStrength{100};
+
+    map_strength_to_alpha(&pixel, pheromoneStrength, initPheromoneStrength);
+    unsigned char* rgba = reinterpret_cast<unsigned char*>(&pixel);
+
+    EXPECT_EQ(0, rgba[3]);
+
+}
+
+TEST(PheromoneToAlphaMap, GivenVerySmallStrengthPheromone_ExpectOneAlphaInImageBuffer)
+{
+    int pixel{0};
+    double pheromoneStrength{0.5};
+    double initPheromoneStrength{100};
+
+    map_strength_to_alpha(&pixel, pheromoneStrength, initPheromoneStrength);
+    unsigned char* rgba = reinterpret_cast<unsigned char*>(&pixel);
+
+    EXPECT_EQ(1, rgba[3]);
+
+}
+
+TEST(PheromoneToAlphaMap, GivenLargerThanInitStrengthPheromone_ExpectMaxAlphaInImageBuffer)
+{
+    int pixel{0};
+    double pheromoneStrength{350};
+    double initPheromoneStrength{100};
+
+    map_strength_to_alpha(&pixel, pheromoneStrength, initPheromoneStrength);
+    unsigned char* rgba = reinterpret_cast<unsigned char*>(&pixel);
+
+    EXPECT_EQ(255, rgba[3]);
 
 }

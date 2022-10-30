@@ -17,8 +17,8 @@ void AntPainter::paintEvent(QPaintEvent* event)
 
 void AntPainter::drawPheromones(QPainter* painter)
 {
-    const uchar* foodData = world.get_food_pheromones()->get_strengths();
-    const uchar* homeData = world.get_home_pheromones()->get_strengths();
+    const uchar* foodData = world.get_food_pheromones()->get_image();
+    const uchar* homeData = world.get_home_pheromones()->get_image();
     std::pair<double,double> bounds = world.get_bounds();
     int width= bounds.first;
     int height = bounds.second;
