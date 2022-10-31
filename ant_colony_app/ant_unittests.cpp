@@ -426,7 +426,7 @@ TEST(AntToTarget, GivenTargetCloseToAnt_ExpectAntAtTarget)
 
     EXPECT_EQ(1, a.x);
     EXPECT_EQ(1, a.y);
-    EXPECT_NEAR(.7854, a.heading, .001);
+    EXPECT_NEAR(.7854 - PI, a.heading, .001);
 
 }
 
@@ -676,3 +676,68 @@ TEST(PheromoneToAlphaMap, GivenLargerThanInitStrengthPheromone_ExpectMaxAlphaInI
     EXPECT_EQ(255, rgba[3]);
 
 }
+
+TEST(PheromoneSearch, GivenEmptyPheromonesWhenRaySearching_ExpectNoneFound)
+{
+    Ant* ant = new Ant;
+    Pheromone p(100,100);
+    double headingToPheromone = p.ray_search(ant);
+
+    EXPECT_EQ(-PI, headingToPheromone);
+}
+
+TEST(PheromoneSearch, GivenPheromonesInFrontOfAntWhenRaySearching_ExpectForwardHeading)
+{
+    Ant* ant = new Ant{1,1,0};
+    Pheromone p(100,100);
+    p.add(3,1);
+    double headingToPheromone = p.ray_search(ant);
+
+    EXPECT_EQ(0, headingToPheromone);
+}
+
+TEST(PheromoneSearch, GivenPheromonesToLeftOfAntWhenRaySearching_ExpectLeftHeading)
+{
+    Ant* ant = new Ant{3,2,0};
+    Pheromone p(100,100);
+    p.add(5,1);
+    double headingToPheromone = p.ray_search(ant);
+
+    EXPECT_NEAR(-0.2618, headingToPheromone, NEAR_TOL);
+}
+
+TEST(PheromoneSearch, GivenPheromonesToRightOfAntWhenRaySearching_ExpectRightHeading)
+{
+    Ant* ant = new Ant{3,2,0};
+    Pheromone p(100,100);
+    p.add(5,3);
+    double headingToPheromone = p.ray_search(ant);
+
+    EXPECT_NEAR(0.2618, headingToPheromone, NEAR_TOL);
+}
+
+
+TEST(PheromoneSearch, GivenMultiplePheromonesInFrontOfAntWhenRaySearching_ExpectHeadingToStrongest)
+{
+    Ant* ant = new Ant{3,2,0};
+    Pheromone p(100,100);
+    p.add(5,1);
+    p.add(5,3);
+    p.add(5,3);
+    p.add(3,1);
+    double headingToPheromone = p.ray_search(ant);
+
+    EXPECT_NEAR(0.2618, headingToPheromone, NEAR_TOL);
+}
+
+TEST(PheromoneSearch, GivenPheromonesInFrontOfAntAtAnAngleWhenRaySearching_ExpectForwardHeading)
+{
+    Ant* ant = new Ant{3,1,0.75};
+    Pheromone p(100,100);
+    p.add(4,2);
+    double headingToPheromone = p.ray_search(ant);
+
+    EXPECT_EQ(0, headingToPheromone);
+}
+
+

@@ -84,15 +84,16 @@ void World::to_pheromones(Ant* ant)
     Pheromone* targetPheromone;
     ant->hasFood ? targetPheromone = homePheromones :
             targetPheromone = foodPheromones;
-    std::pair<double,double> target = targetPheromone->search(ant->x, ant->y, ant->heading);
+    double targetHeading = targetPheromone->ray_search(ant);
 
-    if (target.first == -1)
+    if (targetHeading == -PI)
     {
         ant->random_walk(worldBounds);
     }
     else
     {
-        ant->heading_to_target(target, worldBounds);
+        ant->heading = ant->heading + targetHeading;
+        ant->propogate_dynamics(worldBounds);
     }
 }
 

@@ -22,6 +22,7 @@ const unsigned char* Pheromone::get_pixel(int x, int y) const
 const double Pheromone::get_strength(int x, int y) const
 {
     int arrayIndex = grid_to_array_index(width, height, x, y);
+    if (arrayIndex < 0) return 0;
     return strengthsDouble[arrayIndex];
 }
 
@@ -44,6 +45,7 @@ void Pheromone::add(double x, double y)
     locations[x].insert(y);
 
     int arrayIndex = grid_to_array_index(width, height, x, y);
+    if (arrayIndex < 0) return;
     set_rgba(&imageBuffer[arrayIndex], red, green, blue, 255);
     strengthsDouble[arrayIndex] += initPheromoneStrength;
 }
@@ -74,6 +76,7 @@ void Pheromone::update()
 void Pheromone::decay(int x, int y)
 {
     int index = grid_to_array_index(width, height, x, y);
+    if (index < 0) return;
     strengthsDouble[index] = strengthsDouble[index] - decayRate;
     if (strengthsDouble[index] <= 0)
     {
@@ -83,3 +86,36 @@ void Pheromone::decay(int x, int y)
 
     map_strength_to_alpha(&imageBuffer[index], strengthsDouble[index], initPheromoneStrength);
 }
+
+double Pheromone::ray_search(Ant* ant) const
+{
+    double strongestPheromone{0};
+    double strongestHeading{-PI};
+
+    std::vector<double> headings{-searchAzimuth, 0, searchAzimuth};
+    for (int i = 0; i < headings.size(); i++)
+    {
+        std::pair<int,int> grid = propogate_ray(ant, headings[i]);
+        double strength = get_strength(grid.first, grid.second);
+
+        if (strength > strongestPheromone)
+        {
+            strongestPheromone = strength;
+            strongestHeading = headings[i];
+        }
+
+    }
+
+    return strongestHeading;
+}
+
+std::pair<int, int> Pheromone::propogate_ray(Ant* ant, double angle) const
+{
+    double x = ant->x + std::cos(ant->heading + angle)*searchDistance;
+    double y = ant->y + std::sin(ant->heading + angle)*searchDistance;
+    int xGrid = int(round(x));
+    int yGrid = int(round(y));
+    return {xGrid, yGrid};
+}
+
+

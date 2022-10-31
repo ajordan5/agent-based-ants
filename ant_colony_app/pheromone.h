@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "object.h"
+#include "ant.h"
 #include "colorhelper.h"
 
 class Pheromone : public Object
@@ -17,6 +18,7 @@ public:
     unsigned char get_decay_rate() const;
     double get_init_strength() const;
     void update();
+    double ray_search(Ant* a) const;
 
 protected:
     size_t width{0};
@@ -24,12 +26,15 @@ protected:
     int red{255};
     int green{0};
     int blue{0};
+    double searchAzimuth{15.0 * PI/180};
+    double searchDistance{2.0};
     std::vector<int> imageBuffer;
     std::vector<double> strengthsDouble;
     unsigned char decayRate{1};
     double initPheromoneStrength{100};
 
     void decay(int x, int y);
+    std::pair<int, int> propogate_ray(Ant* ant, double angle) const;
 };
 
 #endif // PHEROMONE_H
