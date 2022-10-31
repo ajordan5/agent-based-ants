@@ -571,14 +571,10 @@ TEST(Pheromone, GivenAPheromoneClassWhenUpdating_ExpectPheromonesToDecay)
     p.update();
     double strength = p.get_strength(5, 5);
     double initStrength = p.get_init_strength();
-    unsigned char decayRate = p.get_decay_rate();
+    double decayRate = p.get_decay_rate();
 
     EXPECT_TRUE(p.contains(5,5));
     EXPECT_EQ(initStrength - decayRate, strength);
-//    EXPECT_EQ(pixel[3], 255-decayRate);
-//    EXPECT_EQ(pixel[2], 255);
-//    EXPECT_EQ(pixel[1], 0);
-//    EXPECT_EQ(pixel[0], 0);
 }
 
 TEST(Pheromone, GivenAPheromoneClassWhenUpdatingMultipleTimes_ExpectPheromonesToDecay)
@@ -589,7 +585,7 @@ TEST(Pheromone, GivenAPheromoneClassWhenUpdatingMultipleTimes_ExpectPheromonesTo
         p.update();
     double strength = p.get_strength(2, 3);
     double initStrength = p.get_init_strength();
-    unsigned char decayRate = p.get_decay_rate();
+    double decayRate = p.get_decay_rate();
 
     EXPECT_TRUE(p.contains(2,3));
     EXPECT_EQ(initStrength - 3*decayRate, strength);
@@ -600,7 +596,7 @@ TEST(Pheromone, GivenAPheromoneWhenCompletelyDecayed_ExpectPheromonesToBeRemoved
 {
     Pheromone p(10,10);
     p.add(6,7);
-    unsigned char decayRate = p.get_decay_rate();
+    double decayRate = p.get_decay_rate();
     double initStrength = p.get_init_strength();
     for(int i = 0; i < (initStrength / decayRate); i++)
         p.update();

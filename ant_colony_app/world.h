@@ -33,7 +33,7 @@ public:
 
 protected:
     Colony homeBase;
-    double homeSearchRadius{10};
+    double homeSearchRadius{60};
     std::vector<Ant*> ants;
     std::pair<double,double> worldBounds{1000, 1000};
     int antPopulation{0};

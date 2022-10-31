@@ -26,7 +26,7 @@ const double Pheromone::get_strength(int x, int y) const
     return strengthsDouble[arrayIndex];
 }
 
-unsigned char Pheromone::get_decay_rate() const
+double Pheromone::get_decay_rate() const
 {
     return decayRate;
 }

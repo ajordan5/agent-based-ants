@@ -34,7 +34,7 @@ bool Ant::to_target(std::pair<double,double> target, std::pair<double,double> bo
     {
         x = target.first;
         y = target.second;
-        heading = heading - PI;
+        heading = direction - PI;
         hasFood = !hasFood;
         return true;
     }

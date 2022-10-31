@@ -24,7 +24,7 @@ void MainWindow::setup_sim()
         }
 
     }
-    ant_sim->add_many_ants(100);
+    ant_sim->add_many_ants(50);
 }
 
 void MainWindow::update_sim()

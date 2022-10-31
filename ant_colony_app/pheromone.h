@@ -15,7 +15,7 @@ public:
     const double get_strength(int x, int y) const;
     void add(double x, double y) override;
     void set_color(int r, int g, int b);
-    unsigned char get_decay_rate() const;
+    double get_decay_rate() const;
     double get_init_strength() const;
     void update();
     double ray_search(Ant* a) const;
@@ -27,10 +27,10 @@ protected:
     int green{0};
     int blue{0};
     double searchAzimuth{15.0 * PI/180};
-    double searchDistance{2.0};
+    double searchDistance{5.0};
     std::vector<int> imageBuffer;
     std::vector<double> strengthsDouble;
-    unsigned char decayRate{1};
+    double decayRate{0.15};
     double initPheromoneStrength{100};
 
     void decay(int x, int y);
