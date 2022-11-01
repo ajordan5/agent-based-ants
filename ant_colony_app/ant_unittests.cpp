@@ -588,7 +588,7 @@ TEST(Pheromone, GivenAPheromoneClassWhenUpdatingMultipleTimes_ExpectPheromonesTo
     double decayRate = p.get_decay_rate();
 
     EXPECT_TRUE(p.contains(2,3));
-    EXPECT_EQ(initStrength - 3*decayRate, strength);
+    EXPECT_NEAR(initStrength - 3*decayRate, strength, NEAR_TOL);
 
 }
 
@@ -617,7 +617,7 @@ TEST(PheromoneToAlphaMap, GivenInitStrengthPheromone_ExpectMaxAlphaInImageBuffer
     map_strength_to_alpha(&pixel, pheromoneStrength, initPheromoneStrength);
     unsigned char* rgba = reinterpret_cast<unsigned char*>(&pixel);
 
-    EXPECT_EQ(255, rgba[3]);
+    EXPECT_EQ(205, rgba[3]);
 
 }
 
@@ -630,7 +630,7 @@ TEST(PheromoneToAlphaMap, GivenHalfStrengthPheromone_ExpectHalfMaxAlphaInImageBu
     map_strength_to_alpha(&pixel, pheromoneStrength, initPheromoneStrength);
     unsigned char* rgba = reinterpret_cast<unsigned char*>(&pixel);
 
-    EXPECT_EQ(127, rgba[3]);
+    EXPECT_EQ(102, rgba[3]);
 
 }
 
@@ -669,7 +669,7 @@ TEST(PheromoneToAlphaMap, GivenLargerThanInitStrengthPheromone_ExpectMaxAlphaInI
     map_strength_to_alpha(&pixel, pheromoneStrength, initPheromoneStrength);
     unsigned char* rgba = reinterpret_cast<unsigned char*>(&pixel);
 
-    EXPECT_EQ(255, rgba[3]);
+    EXPECT_EQ(205, rgba[3]);
 
 }
 
@@ -686,7 +686,7 @@ TEST(PheromoneSearch, GivenPheromonesInFrontOfAntWhenRaySearching_ExpectForwardH
 {
     Ant* ant = new Ant{1,1,0};
     Pheromone p(100,100);
-    p.add(3,1);
+    p.add(6,1);
     double headingToPheromone = p.ray_search(ant);
 
     EXPECT_EQ(0, headingToPheromone);
@@ -696,7 +696,7 @@ TEST(PheromoneSearch, GivenPheromonesToLeftOfAntWhenRaySearching_ExpectLeftHeadi
 {
     Ant* ant = new Ant{3,2,0};
     Pheromone p(100,100);
-    p.add(5,1);
+    p.add(8,1);
     double headingToPheromone = p.ray_search(ant);
 
     EXPECT_NEAR(-0.2618, headingToPheromone, NEAR_TOL);
@@ -706,7 +706,7 @@ TEST(PheromoneSearch, GivenPheromonesToRightOfAntWhenRaySearching_ExpectRightHea
 {
     Ant* ant = new Ant{3,2,0};
     Pheromone p(100,100);
-    p.add(5,3);
+    p.add(8,3);
     double headingToPheromone = p.ray_search(ant);
 
     EXPECT_NEAR(0.2618, headingToPheromone, NEAR_TOL);
@@ -717,10 +717,10 @@ TEST(PheromoneSearch, GivenMultiplePheromonesInFrontOfAntWhenRaySearching_Expect
 {
     Ant* ant = new Ant{3,2,0};
     Pheromone p(100,100);
-    p.add(5,1);
-    p.add(5,3);
-    p.add(5,3);
-    p.add(3,1);
+    p.add(8,1);
+    p.add(8,3);
+    p.add(8,3);
+    p.add(8,2);
     double headingToPheromone = p.ray_search(ant);
 
     EXPECT_NEAR(0.2618, headingToPheromone, NEAR_TOL);
@@ -730,7 +730,7 @@ TEST(PheromoneSearch, GivenPheromonesInFrontOfAntAtAnAngleWhenRaySearching_Expec
 {
     Ant* ant = new Ant{3,1,0.75};
     Pheromone p(100,100);
-    p.add(4,2);
+    p.add(7,4);
     double headingToPheromone = p.ray_search(ant);
 
     EXPECT_EQ(0, headingToPheromone);

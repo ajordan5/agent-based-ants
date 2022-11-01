@@ -15,7 +15,7 @@ public:
     std::unordered_map<int, std::unordered_set<int>> get_locations() const;
     int get_total() const;
     std::pair<int,int> search(double x, double y, double heading);
-    bool contains(int x, int y);
+    virtual bool contains(int x, int y);
 
 protected:
     std::unordered_map<int, std::unordered_set<int>> locations;

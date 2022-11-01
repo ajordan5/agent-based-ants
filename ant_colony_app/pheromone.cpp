@@ -8,6 +8,12 @@ Pheromone::Pheromone(size_t w, size_t h) : width{w}, height{h}
     forwardSearchDistance = 4;
 }
 
+bool Pheromone::contains(int x, int y)
+{
+    int arrayIndex = grid_to_array_index(width, height, x, y);
+    return strengthsDouble[arrayIndex] > 0;
+}
+
 const unsigned char* Pheromone::get_image() const
 {
     return reinterpret_cast<const unsigned char*>(imageBuffer.data());

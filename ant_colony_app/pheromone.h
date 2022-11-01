@@ -14,6 +14,7 @@ public:
     const unsigned char* get_pixel(int x, int y) const;
     const double get_strength(int x, int y) const;
     void add(double x, double y) override;
+    bool contains(int x, int y) override;
     void set_color(int r, int g, int b);
     double get_decay_rate() const;
     double get_init_strength() const;
