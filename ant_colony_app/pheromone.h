@@ -31,7 +31,7 @@ protected:
     double searchDistance{5.0};
     std::vector<int> imageBuffer;
     std::vector<double> strengthsDouble;
-    double decayRate{0.15};
+    double decayRate{0.45};
     double initPheromoneStrength{100};
 
     void decay(int index);
