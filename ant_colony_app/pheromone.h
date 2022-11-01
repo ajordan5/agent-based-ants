@@ -33,7 +33,7 @@ protected:
     double decayRate{0.15};
     double initPheromoneStrength{100};
 
-    void decay(int x, int y);
+    void decay(int index);
     std::pair<int, int> propogate_ray(Ant* ant, double angle) const;
 };
 

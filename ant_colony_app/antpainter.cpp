@@ -9,10 +9,11 @@ void AntPainter::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    drawAnts(&painter);
-    drawFood(&painter);
-    drawHome(&painter);
     drawPheromones(&painter);
+    drawFood(&painter);
+    drawAnts(&painter);
+    drawHome(&painter);
+
 }
 
 void AntPainter::drawPheromones(QPainter* painter)
@@ -53,11 +54,17 @@ void AntPainter::drawHome(QPainter* painter)
     pen.setColor(Qt::black);
     pen.setWidth(10);
     painter->setPen(pen);
+    painter->setBrush(Qt::black);
 
     auto home = world.get_home();
     auto homePixels = world_to_pixel(home->x, home->y);
 
-    painter->drawEllipse(homePixels.first, homePixels.second, 20, 20);
+
+    painter->drawEllipse(homePixels.first-20, homePixels.second-20, 40, 40);
+    QString foodCount = QString::number(home->food_count);
+    pen.setColor(Qt::white);
+    painter->setPen(pen);
+    painter->drawText(homePixels.first-5, homePixels.second+2, foodCount);
 
 
 }

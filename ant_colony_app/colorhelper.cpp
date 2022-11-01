@@ -35,8 +35,8 @@ void map_strength_to_alpha(int* pixel, double pheromoneStrength, double initPher
 {
     unsigned char* rgba = reinterpret_cast<unsigned char*>(pixel);
     if (pheromoneStrength >= initPheromoneStrength)
-        rgba[3] = 255;
+        rgba[3] = 205;
     else
-        rgba[3] = int(pheromoneStrength/initPheromoneStrength * 255);
+        rgba[3] = int(pheromoneStrength/initPheromoneStrength * 205);
 
 }

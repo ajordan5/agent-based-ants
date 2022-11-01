@@ -16,7 +16,22 @@ void MainWindow::setup_sim()
 {
     timer = new QTimer(this);
     ant_sim = new World;
-    for (int i = 700; i < 900; i = i+5)
+    setup_food();
+    ant_sim->add_many_ants(1000);
+}
+
+void MainWindow::setup_food()
+{
+    for (int i = 300; i < 700; i = i+5)
+    {
+        for (int j = 100; j < 300; j = j+5)
+        {
+            ant_sim->get_food()->add(i,j);
+        }
+
+    }
+
+    for (int i = 700; i < 800; i = i+5)
     {
         for (int j = 700; j < 900; j = j+5)
         {
@@ -24,7 +39,15 @@ void MainWindow::setup_sim()
         }
 
     }
-    ant_sim->add_many_ants(50);
+
+    for (int i = 200; i < 300; i = i+5)
+    {
+        for (int j = 700; j < 900; j = j+5)
+        {
+            ant_sim->get_food()->add(i,j);
+        }
+
+    }
 }
 
 void MainWindow::update_sim()

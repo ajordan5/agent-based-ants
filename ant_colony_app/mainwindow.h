@@ -28,5 +28,6 @@ private:
     World* ant_sim{nullptr};
     QTimer* timer{nullptr};
     void setup_sim();
+    void setup_food();
 };
 #endif // MAINWINDOW_H

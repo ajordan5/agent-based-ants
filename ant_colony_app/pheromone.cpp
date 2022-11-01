@@ -40,9 +40,7 @@ void Pheromone::add(double x, double y)
 {
     x = int(x);
     y = int(y);
-//    if(locations.count(x) && locations[x].count(y)) return;
     total++;
-    locations[x].insert(y);
 
     int arrayIndex = grid_to_array_index(width, height, x, y);
     if (arrayIndex < 0) return;
@@ -59,29 +57,32 @@ void Pheromone::set_color(int r, int g, int b)
 
 void Pheromone::update()
 {
-    std::unordered_map<int, std::unordered_set<int>> locations_copy(locations);
-    for (auto i = locations_copy.begin();  i != locations_copy.end(); i++)
-    {
+//    std::unordered_map<int, std::unordered_set<int>> locations_copy(locations);
+//    for (auto i = locations_copy.begin();  i != locations_copy.end(); i++)
+//    {
 
-        int x = i->first;
-        std::unordered_set<int> ys = i->second;
-        for (auto y = ys.begin(); y != ys.end(); y++)
-        {
-            decay(x, *y);
-        }
+//        int x = i->first;
+//        std::unordered_set<int> ys = i->second;
+//        for (auto y = ys.begin(); y != ys.end(); y++)
+//        {
+//            decay(x, *y);
+//        }
+//    }
+    for (int i = 0; i < strengthsDouble.size(); i++)
+    {
+        decay(i);
     }
 
 }
 
-void Pheromone::decay(int x, int y)
+void Pheromone::decay(int index)
 {
-    int index = grid_to_array_index(width, height, x, y);
-    if (index < 0) return;
+    if (index < 0 || strengthsDouble[index] == 0) return;
+
     strengthsDouble[index] = strengthsDouble[index] - decayRate;
     if (strengthsDouble[index] <= 0)
     {
         strengthsDouble[index] = 0;
-        remove(x, y);
     }
 
     map_strength_to_alpha(&imageBuffer[index], strengthsDouble[index], initPheromoneStrength);
