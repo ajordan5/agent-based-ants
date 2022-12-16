@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTimer>
+#include <Qt3DRender/qcamera.h>
 #include <world.h>
 
 QT_BEGIN_NAMESPACE

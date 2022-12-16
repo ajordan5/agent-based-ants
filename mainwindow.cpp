@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setup_sim();
     connect(timer, SIGNAL(timeout()), this, SLOT(update_sim()));
-    timer->start(5);
+    timer->start(10);
     connect(this, SIGNAL(send_world(const World&)), ui->PaintWidget, SLOT(save_world(const World&)));
 }
 
@@ -22,27 +22,27 @@ void MainWindow::setup_sim()
 
 void MainWindow::setup_food()
 {
-    for (int i = 300; i < 700; i = i+5)
+    for (int i = 300; i < 700; i = i+2)
     {
-        for (int j = 100; j < 300; j = j+5)
+        for (int j = 100; j < 300; j = j+2)
         {
             ant_sim->get_food()->add(i,j);
         }
 
     }
 
-    for (int i = 700; i < 800; i = i+5)
+    for (int i = 700; i < 800; i = i+2)
     {
-        for (int j = 700; j < 900; j = j+5)
+        for (int j = 700; j < 900; j = j+2)
         {
             ant_sim->get_food()->add(i,j);
         }
 
     }
 
-    for (int i = 200; i < 300; i = i+5)
+    for (int i = 200; i < 300; i = i+2)
     {
-        for (int j = 700; j < 900; j = j+5)
+        for (int j = 700; j < 900; j = j+2)
         {
             ant_sim->get_food()->add(i,j);
         }
