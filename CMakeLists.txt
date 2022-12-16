@@ -18,7 +18,7 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 list(APPEND CMAKE_PREFIX_PATH "C:/Program Files/GTest")
-#find_package(GTest REQUIRED)
+find_package(GTest REQUIRED)
 
 SET(PROJECT_SOURCES
         world.cpp
@@ -54,15 +54,15 @@ target_include_directories(antSim
         ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-#add_executable(ant_unittests)
-#target_sources(ant_unittests PRIVATE ant_unittests.cpp)
-#target_include_directories(ant_unittests PRIVATE "${GTEST_INCLUDE_DIRS}")
-#target_link_libraries(ant_unittests
-#    PRIVATE
-#        ${GTEST_LIBRARIES}
-#        ${GTEST_MAIN_LIBRARIES}
-#        antSim
-#)
+add_executable(ant_unittests)
+target_sources(ant_unittests PRIVATE ant_unittests.cpp)
+target_include_directories(ant_unittests PRIVATE "${GTEST_INCLUDE_DIRS}")
+target_link_libraries(ant_unittests
+    PRIVATE
+        ${GTEST_LIBRARIES}
+        ${GTEST_MAIN_LIBRARIES}
+        antSim
+)
 
 set(QT_SOURCES
         main.cpp
@@ -73,23 +73,12 @@ set(QT_SOURCES
         mainwindow.ui
 )
 
-#qt_add_executable(ant_colony_app
-#    MANUAL_FINALIZATION
-#    ${QT_SOURCES}
-#)
+
 add_executable(${PROJECT_NAME})
 target_sources(${PROJECT_NAME} PRIVATE ${QT_SOURCES} )
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 target_include_directories(${PROJECT_NAME} PRIVATE)
 target_link_libraries(ant_colony_app PRIVATE Qt6::Widgets antSim)
-
-#set_target_properties(ant_colony_app PROPERTIES
-#    MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
-#    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-#    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-#    MACOSX_BUNDLE TRUE
-#    WIN32_EXECUTABLE TRUE
-#)
 
 install(TARGETS antSim
     EXPORT antSimTargets
@@ -104,11 +93,11 @@ install(EXPORT antSimTargets
     NAMESPACE antSim::
     DESTINATION lib/cmake/antSim)
 
-#install(
-#    FILES
-#        "antColonyConfig.cmake"
-#    DESTINATION lib/cmake/binaryTree
-#)
+install(
+    FILES
+        "antColonyConfig.cmake"
+    DESTINATION lib/cmake/binaryTree
+)
 
 install(TARGETS ant_colony_app
     BUNDLE DESTINATION .
